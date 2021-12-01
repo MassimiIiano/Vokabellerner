@@ -47,6 +47,10 @@ public class SettingsDialog
 		comboBox.setBounds(80, 80, 108, 22);
 		frmEinstellungen.getContentPane().add(comboBox);
 
+		JButton btnErrinerung = new JButton("Errinerung");
+		btnErrinerung.setBounds(10, 117, 97, 25);
+		frmEinstellungen.getContentPane().add(btnErrinerung);
+		
 		JButton btnImport = new JButton("Import");
 		btnImport.setBounds(385, 177, 97, 25);
 		frmEinstellungen.getContentPane().add(btnImport);
