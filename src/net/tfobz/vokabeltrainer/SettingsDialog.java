@@ -1,21 +1,20 @@
-package net.tfobz.vokabellerner;
+package net.tfobz.vokabeltrainer;
 
-import java.awt.Color;
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.Font;
 
 public class SettingsDialog {
 
-    private JFrame frmEinstellungen;
+    private JDialog frmEinstellungen;
 
     /**
      * Launch the application.
@@ -44,13 +43,12 @@ public class SettingsDialog {
      * Initialize the contents of the frame.
      */
     private void initialize() {
-        frmEinstellungen = new JFrame();
-        frmEinstellungen.getContentPane().setBackground(Color.WHITE);
+        frmEinstellungen = new JDialog();
 
         frmEinstellungen.setTitle("Einstellungen");
         frmEinstellungen.setResizable(false);
         frmEinstellungen.setBounds(100, 100, 500, 250);
-        frmEinstellungen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frmEinstellungen.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         frmEinstellungen.getContentPane().setLayout(null);
 
         JCheckBox chckbxGrosskleinschreibungBeachten = new JCheckBox("Gross-/Kleinschreibung beachten");
@@ -84,13 +82,5 @@ public class SettingsDialog {
         frmEinstellungen.getContentPane().add(btnAddLanguage);
         JRootPane rootPane = SwingUtilities.getRootPane(btnAddLanguage);
         rootPane.setDefaultButton(btnAddLanguage);
-
-        JButton button = new JButton("+");
-        button.setFont(new Font("Tahoma", Font.BOLD, 23));
-        button.setBounds(30, 150, 25, 25);
-        button.setBorder(null);
-        button.setBackground(Color.WHITE);
-        frmEinstellungen.getContentPane().add(button);
-
     }
 }
