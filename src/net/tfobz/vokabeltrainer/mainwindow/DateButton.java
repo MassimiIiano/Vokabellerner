@@ -1,4 +1,4 @@
-package net.tfobz.vokabeltrainer;
+package net.tfobz.vokabeltrainer.mainwindow;
 
 import java.awt.event.*;
 import java.text.ParseException;

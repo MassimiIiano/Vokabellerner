@@ -1,4 +1,4 @@
-package net.tfobz.vokabeltrainer;
+package net.tfobz.vokabeltrainer.dialogs;
 
 import java.awt.EventQueue;
 
