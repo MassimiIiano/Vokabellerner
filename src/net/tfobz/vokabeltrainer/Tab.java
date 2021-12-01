@@ -1,20 +1,8 @@
 package net.tfobz.vokabeltrainer;
 
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.*;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JWindow;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 public class Tab extends JPanel
 {
@@ -48,9 +36,9 @@ public class Tab extends JPanel
 		JComboBox comboBoxRechts = new JComboBox();
 		lblZu.setLabelFor(comboBoxRechts);
 		comboBoxRechts.setBounds(505, 42, 209, 30);
-		for(Sprachen sprache : Sprachen.values()) {
+		for(Sprachen sprache : Sprachen.values()) 
 			comboBoxRechts.addItem(sprache.toString());
-		}
+		
 		comboBoxRechts.setSelectedIndex(-1);
 		this.add(comboBoxRechts);
 		

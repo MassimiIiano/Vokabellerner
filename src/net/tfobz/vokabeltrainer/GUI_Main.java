@@ -1,55 +1,24 @@
 package net.tfobz.vokabeltrainer;
 
-import java.awt.EventQueue;
-import java.awt.Toolkit;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.awt.image.FilteredImageSource;
-import java.awt.image.ImageFilter;
-import java.awt.image.ImageProducer;
-import java.awt.image.RGBImageFilter;
-import java.io.File;
-import java.io.IOException;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import java.awt.Font;
-import java.awt.Image;
-
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
 public class GUI_Main extends JFrame
 {
-
-	private JFrame frame;
-	private JTextField textField;
-
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		GUI_Main window = new GUI_Main();
+		window.setVisible(true);
 	}
 
 	public GUI_Main() {
 		this.setTitle("Vokabeltrainer");
 		this.setBounds((Toolkit.getDefaultToolkit().getScreenSize().width / 2) - 450,
 				(Toolkit.getDefaultToolkit().getScreenSize().height / 2) - 350, 750, 455);
-		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(false);
 		getContentPane().setLayout(null);	
 		
@@ -91,9 +60,5 @@ public class GUI_Main extends JFrame
 				//btnAddTab.setLocation(tabbedPane.getTabComponentAt(tabbedPane.getTabCount()-1).getX() + 20, 0);
 			}
 		});
-		
-
-		
-		this.setVisible(true);
 	}
 }
