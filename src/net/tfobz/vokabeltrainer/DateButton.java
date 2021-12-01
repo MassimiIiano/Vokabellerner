@@ -31,7 +31,7 @@ public class DateButton extends JButton {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    date = new SimpleDateFormat("dd.MM.yyyy").parse(dt.getText().strip());
+                    date = new SimpleDateFormat("dd.MM.yyyy").parse(dt.getText().trim());
                     dt.setVisible(false);
                     DateButton.this.setVisible(true);
                 } catch (ParseException e1) {
