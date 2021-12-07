@@ -12,6 +12,8 @@ import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class SettingsDialog
 {
@@ -49,6 +51,14 @@ public class SettingsDialog
 
 		JButton btnErrinerung = new JButton("Errinerung");
 		btnErrinerung.setBounds(10, 117, 97, 25);
+		btnErrinerung.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new KalenderDialog();
+			}
+			
+		});
 		frmEinstellungen.getContentPane().add(btnErrinerung);
 		
 		JButton btnImport = new JButton("Import");
@@ -59,7 +69,7 @@ public class SettingsDialog
 		btnExport.setBounds(276, 177, 97, 25);
 		frmEinstellungen.getContentPane().add(btnExport);
 
-		JButton btnAddLanguage = new JButton("Add Language");
+		JButton btnAddLanguage = new JButton("Sprache hinzufügen");
 		btnAddLanguage.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnAddLanguage.setBounds(8, 177, 133, 25);
 		frmEinstellungen.getContentPane().add(btnAddLanguage);

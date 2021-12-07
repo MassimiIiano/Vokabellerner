@@ -3,30 +3,39 @@ package net.tfobz.vokabeltrainer.mainwindow;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Date;
+
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JButton;
+import net.tfobz.vokabeltrainer.dialogs.*;
+import net.tfobz.vokabeltrainer.model.*;
 
 public class GUI_Main extends JFrame
 {
+	
+	Lernkartei chosenKartei;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		GUI_Main window = new GUI_Main();
+		window.setVisible(true);
 	}
 
 	public GUI_Main() {
 		this.setTitle("Vokabeltrainer");
 		this.setBounds((Toolkit.getDefaultToolkit().getScreenSize().width / 2) - 375,
 				(Toolkit.getDefaultToolkit().getScreenSize().height / 2) - 187, 750, 375);
-		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		getContentPane().setLayout(null);
 
+		chosenKartei = ChooseKartei.cooseKartei(this);
+		
 		JButton btnAddTab = new JButton("+");
 		btnAddTab.setBounds(178, 0, 20, 20);
 		btnAddTab.setBorder(null);
@@ -37,9 +46,11 @@ public class GUI_Main extends JFrame
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, 744, 346);
 		tabbedPane.addTab("Fach 1", new Tab());
+		VokabeltrainerDB.hinzufuegenFach(chosenKartei.getNummer(), new Fach(0, "Fach 1", 0, new Date()));
 		tabbedPane.addTab("Fach 2", new Tab());
+		VokabeltrainerDB.hinzufuegenFach(chosenKartei.getNummer(), new Fach(1, "Fach 2", 0, new Date()));
 		tabbedPane.addTab("Fach 3", new Tab());
-
+		VokabeltrainerDB.hinzufuegenFach(chosenKartei.getNummer(), new Fach(2, "Fach 3", 0, new Date()));
 		tabbedPane.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -52,7 +63,6 @@ public class GUI_Main extends JFrame
 		});
 		getContentPane().add(btnAddTab);
 		getContentPane().add(tabbedPane);
-		// tabbedPane.getTabComponentAt(tabbedPane.getTabCount()-1).getX()
 
 		btnAddTab.addMouseListener(new MouseAdapter() {
 
@@ -60,11 +70,11 @@ public class GUI_Main extends JFrame
 			public void mouseClicked(MouseEvent e) {
 				if (tabbedPane.getTabCount() < 12) {
 					tabbedPane.addTab("Fach " + (tabbedPane.getTabCount() + 1), new Tab());
+					int fachNmber = VokabeltrainerDB.getFaecher(chosenKartei.getNummer()).size()+1;
+					VokabeltrainerDB.hinzufuegenFach(chosenKartei.getNummer(), new Fach(fachNmber, "Fach " + fachNmber, 0, new Date()));
 					btnAddTab.setLocation(btnAddTab.getX() + 59, 0);
 				}
 			}
 		});
-
-		this.setVisible(true);
 	}
 }

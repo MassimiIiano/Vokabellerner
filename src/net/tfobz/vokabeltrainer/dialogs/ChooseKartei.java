@@ -4,9 +4,14 @@ import java.util.*;
 import javax.swing.*;
 import net.tfobz.vokabeltrainer.model.*;
 
-public class CooseKartei {
+public class ChooseKartei {
     public static Lernkartei cooseKartei(JFrame parent) {
         List<Lernkartei> lernkarteien = VokabeltrainerDB.getLernkarteien(); 
+        if(lernkarteien.isEmpty())
+        {
+        	VokabeltrainerDB.hinzufuegenLernkartei(new Lernkartei("Standard Lernkartei", "Deusch", "Englisch", true, false));
+        	lernkarteien = VokabeltrainerDB.getLernkarteien();
+        }
         Object[] list = lernkarteien.toArray();
         Object ret = JOptionPane.showInputDialog(
             parent, 
