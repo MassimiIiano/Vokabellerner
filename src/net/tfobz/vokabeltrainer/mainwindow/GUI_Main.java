@@ -8,6 +8,7 @@ import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Font;
 import javax.swing.JButton;
 import net.tfobz.vokabeltrainer.dialogs.*;
@@ -22,8 +23,12 @@ public class GUI_Main extends JFrame
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		GUI_Main window = new GUI_Main();
-		window.setVisible(true);
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				new GUI_Main();
+			}
+		});
 	}
 
 	public GUI_Main() {
@@ -34,7 +39,7 @@ public class GUI_Main extends JFrame
 		this.setResizable(false);
 		getContentPane().setLayout(null);
 
-		chosenKartei = ChooseKartei.cooseKartei(this);
+		chosenKartei = ChooseKartei.chooseKartei(this);
 		
 		JButton btnAddTab = new JButton("+");
 		btnAddTab.setBounds(178, 0, 20, 20);
@@ -58,6 +63,8 @@ public class GUI_Main extends JFrame
 				if (e.getButton() == 2) {
 					tabbedPane.remove(tabbedPane.getTabCount() - 1);
 					btnAddTab.setLocation(btnAddTab.getX() - 59, 0);
+					int a = tabbedPane.getTabCount()-1;
+					VokabeltrainerDB.loeschenFach(chosenKartei.getNummer(), a);
 				}
 			}
 		});
@@ -69,12 +76,13 @@ public class GUI_Main extends JFrame
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (tabbedPane.getTabCount() < 12) {
-					tabbedPane.addTab("Fach " + (tabbedPane.getTabCount() + 1), new Tab());
 					int fachNmber = VokabeltrainerDB.getFaecher(chosenKartei.getNummer()).size()+1;
 					VokabeltrainerDB.hinzufuegenFach(chosenKartei.getNummer(), new Fach(fachNmber, "Fach " + fachNmber, 0, new Date()));
+					tabbedPane.addTab("Fach " + (tabbedPane.getTabCount() + 1), new Tab());
 					btnAddTab.setLocation(btnAddTab.getX() + 59, 0);
 				}
 			}
 		});
+		setVisible(true);
 	}
 }

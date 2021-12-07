@@ -5,7 +5,7 @@ import javax.swing.*;
 import net.tfobz.vokabeltrainer.model.*;
 
 public class ChooseKartei {
-    public static Lernkartei cooseKartei(JFrame parent) {
+    public static Lernkartei chooseKartei(JFrame parent) {
         List<Lernkartei> lernkarteien = VokabeltrainerDB.getLernkarteien(); 
         if(lernkarteien.isEmpty())
         {
@@ -16,11 +16,11 @@ public class ChooseKartei {
         Object ret = JOptionPane.showInputDialog(
             parent, 
             "Karteien:", 
-            "Start", 
+            "Vokabeltrainer - Lernkartei Auswahl", 
             JOptionPane.QUESTION_MESSAGE, 
             null, 
             list, 
-            "Waele deine Kartei"
+            "Waehle deine Kartei"
         );
         return (Lernkartei) ret;
     }
