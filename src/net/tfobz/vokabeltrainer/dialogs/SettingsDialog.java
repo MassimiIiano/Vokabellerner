@@ -55,7 +55,7 @@ public class SettingsDialog
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new KalenderDialog();
+				new ErrinerungDialog();
 			}
 			
 		});

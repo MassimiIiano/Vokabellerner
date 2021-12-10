@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import net.tfobz.vokabeltrainer.dialogs.*;
 import net.tfobz.vokabeltrainer.model.*;
 
+
 public class GUI_Main extends JFrame
 {
 	
@@ -24,7 +25,6 @@ public class GUI_Main extends JFrame
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
-			@Override
 			public void run() {
 				new GUI_Main();
 			}
