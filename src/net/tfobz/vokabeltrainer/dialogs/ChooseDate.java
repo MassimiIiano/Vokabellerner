@@ -28,7 +28,7 @@ public class ChooseDate extends JPanel
 	public ChooseDate() {
 		//super(parent);
 		setBounds(500, 500, 500, 50);
-		setLayout(new BorderLayout());
+		setLayout(new GridLayout(1, 2));
 			
 		UtilDateModel model = new UtilDateModel();
 		Properties p = new Properties();
@@ -38,10 +38,7 @@ public class ChooseDate extends JPanel
 		p.put("date.year", String.valueOf(calendar.get(Calendar.YEAR)));
 		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
 		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateFormat());
-		datePicker.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		
-		JPanel panelButtons = new JPanel();
-		panelButtons.setLayout(new GridLayout(1,2));
 		JButton btn_ok = new JButton("Ok");
 		btn_ok.addMouseListener(new MouseAdapter() {
 			
@@ -60,13 +57,11 @@ public class ChooseDate extends JPanel
 			}
 		});
 		*/
-		panelButtons.add(btn_ok);
-		//panelButtons.add(btn_cancel);
 		
 
 		
-		add(panelButtons, BorderLayout.NORTH);
-		add(datePicker, BorderLayout.SOUTH);
+		add(btn_ok);
+		add(datePicker);
 		setVisible(true);
 	}
 }
