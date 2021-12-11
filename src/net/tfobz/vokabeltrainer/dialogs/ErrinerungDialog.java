@@ -18,11 +18,12 @@ import java.awt.event.MouseEvent;
 import java.util.Calendar;
 import java.util.Properties;
 
-public class ErrinerungDialog
+public class ErrinerungDialog extends JFrame
 {
 
 	JFrame frame = new JFrame();
 	JLabel l_mitDatum;
+
 	/**
 	 * Launch the application.
 	 */
@@ -60,9 +61,9 @@ public class ErrinerungDialog
 		p.put("date.year", String.valueOf(calendar.get(Calendar.YEAR)));
 		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
 		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateFormat());
-		
+
 		ChooseDate cal = new ChooseDate(l_mitDatum, datePicker);
-		
+
 		JPanel panelPeriodisch = new JPanel();
 		panelPeriodisch.setLayout(new FlowLayout());
 		Font basic = new Font("Tahoma", Font.PLAIN, 23);
@@ -91,30 +92,51 @@ public class ErrinerungDialog
 		}
 
 		l_mitDatum = new JLabel("");
-		
+
 		l_mitDatum.setText("Oder am dd-MM-yyyy errinern:");
 		l_mitDatum.setFont(basic);
 
 		JButton btn_ok = new JButton("Errinerung setzten");
 		btn_ok.addMouseListener(new MouseAdapter() {
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
-				final String calDatum = cal.getDateAsString();
-				l_mitDatum.setText("Oder am " + calDatum + " errinern:");
+
+				if (tf_values[0].getText().isEmpty() && tf_values[1].getText().isEmpty() && tf_values[2].getText().isEmpty()) {
+
+					try {
+						final String calDatum = cal.getDateAsString();
+						l_mitDatum.setText("Oder am " + calDatum + " errinern:");
+					} catch (NullPointerException f) {
+						JOptionPane.showMessageDialog(ErrinerungDialog.this, "Es wurde keine Zeit oder Datum festgelegt!",
+								"Errinerung setzten", JOptionPane.ERROR_MESSAGE);
+					}
+				} else {
+
+					try {
+						cal.getDateAsString();
+					} catch (NullPointerException f) {
+						System.out.println("in Catch");
+
+						// Setzte Errinerung mit Werten aus TextFeldern
+
+						return;
+					}
+					JOptionPane.showMessageDialog(ErrinerungDialog.this, "Es kann nicht eine Zeit und ein Datum gleichzeitig festgelegt werden",
+							"Errinerung setzten", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
-		
+
 		JButton btn_cancel = new JButton("Abbrechen");
 		btn_cancel.addMouseListener(new MouseAdapter() {
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				frame.dispose();
 			}
 		});
-		
+
 		frame.getContentPane().add(panelPeriodisch);
 		frame.getContentPane().add(l_mitDatum);
 		frame.getContentPane().add(cal);
