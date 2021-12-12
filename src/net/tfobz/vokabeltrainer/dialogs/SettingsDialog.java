@@ -28,7 +28,8 @@ public class SettingsDialog
 
 		frmEinstellungen.setTitle("Einstellungen");
 		frmEinstellungen.setResizable(false);
-		frmEinstellungen.setBounds((Toolkit.getDefaultToolkit().getScreenSize().width/2)-250, (Toolkit.getDefaultToolkit().getScreenSize().height/2)-125, 500, 250);
+		frmEinstellungen.setBounds((Toolkit.getDefaultToolkit().getScreenSize().width/2)-250,
+				(Toolkit.getDefaultToolkit().getScreenSize().height/2)-90, 500, 180);
 		frmEinstellungen.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		frmEinstellungen.getContentPane().setLayout(null);
 
@@ -47,6 +48,7 @@ public class SettingsDialog
 		JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] { "Dark", "White" }));
 		comboBox.setBounds(80, 80, 108, 22);
+		comboBox.setSelectedItem("White");
 		frmEinstellungen.getContentPane().add(comboBox);
 
 		JButton btnErrinerung = new JButton("Errinerung");
@@ -62,19 +64,12 @@ public class SettingsDialog
 		frmEinstellungen.getContentPane().add(btnErrinerung);
 		
 		JButton btnImport = new JButton("Import");
-		btnImport.setBounds(385, 177, 97, 25);
+		btnImport.setBounds(385, 117, 97, 25);
 		frmEinstellungen.getContentPane().add(btnImport);
 
 		JButton btnExport = new JButton("Export");
-		btnExport.setBounds(276, 177, 97, 25);
+		btnExport.setBounds(276, 117, 97, 25);
 		frmEinstellungen.getContentPane().add(btnExport);
-
-		JButton btnAddLanguage = new JButton("Sprache hinzufügen");
-		btnAddLanguage.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnAddLanguage.setBounds(8, 177, 133, 25);
-		frmEinstellungen.getContentPane().add(btnAddLanguage);
-		JRootPane rootPane = SwingUtilities.getRootPane(btnAddLanguage);
-		rootPane.setDefaultButton(btnAddLanguage);
 		
 		frmEinstellungen.setVisible(true);
 	}
