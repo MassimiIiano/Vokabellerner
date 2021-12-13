@@ -24,6 +24,7 @@ public class GUI_Main extends JFrame
 
 	Lernkartei chosenKartei;
 	Karte currentKarte;
+	int selectedTab;
 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	ArrayList<Tab> tabs = new ArrayList<Tab>();
 
@@ -58,21 +59,20 @@ public class GUI_Main extends JFrame
 
 			int karteiNummer = chosenKartei.getNummer();
 
-			VokabeltrainerDB.importierenKarten(karteiNummer, "Lernkarteien/" +
-			chosenKartei.getBeschreibung() + ".txt");
-			for(int i = 1; i <= VokabeltrainerDB.getFaecher(chosenKartei.getNummer()).size(); i++) {
-				
+			VokabeltrainerDB.importierenKarten(karteiNummer, "Lernkarteien/" + chosenKartei.getBeschreibung() + ".txt");
+			for (int i = 1; i <= VokabeltrainerDB.getFaecher(chosenKartei.getNummer()).size(); i++) {
+
 				VokabeltrainerDB.aendernFach(new Fach(i, "Fach " + i, 0, new Date()));
 			}
 
-			if(VokabeltrainerDB.getFaecher(chosenKartei.getNummer()).size() < 3) {
-				int ersteFachNummer = VokabeltrainerDB.getFaecher(chosenKartei.getNummer()).size()+1;
-				for(int i = ersteFachNummer; i <= 3; i++) {
+			if (VokabeltrainerDB.getFaecher(chosenKartei.getNummer()).size() < 3) {
+				int ersteFachNummer = VokabeltrainerDB.getFaecher(chosenKartei.getNummer()).size() + 1;
+				for (int i = ersteFachNummer; i <= 3; i++) {
 					VokabeltrainerDB.hinzufuegenFach(chosenKartei.getNummer(), new Fach());
 					VokabeltrainerDB.aendernFach(new Fach(i, "Fach " + i, 0, new Date()));
 				}
 			}
-			
+
 			JButton btnAddTab = new JButton("+");
 			btnAddTab.setBounds(178, 0, 20, 20);
 			btnAddTab.setBorder(null);
@@ -181,7 +181,6 @@ public class GUI_Main extends JFrame
 						}
 
 					}
-
 				});
 				tabs.add(tab);
 				tabbedPane.addTab("Fach " + (i + 1), tabs.get(i));
@@ -190,21 +189,32 @@ public class GUI_Main extends JFrame
 			tabbedPane.addMouseListener(new MouseAdapter() {
 
 				@Override
-				public void mouseClicked(MouseEvent e) {
+				public void mousePressed(MouseEvent e) {
 					if (e.getButton() == 2) {
-						int left = 50 * tabbedPane.getTabCount();
-						int right = 50 * tabbedPane.getTabCount() + 50;
+						tabbedPane.setSelectedIndex(selectedTab);
+						int left = 58 * (tabbedPane.getTabCount() - 1);
+						int right = 58 * (tabbedPane.getTabCount() - 1) + 58;
 						if (e.getX() >= left && e.getX() <= right && e.getY() > 0 && e.getY() < 20) {
 							int fachNummer = tabbedPane.getTabCount();
 							VokabeltrainerDB.loeschenFach(karteiNummer, fachNummer);
 							tabbedPane.remove(tabbedPane.getTabCount() - 1);
-							btnAddTab.setLocation(btnAddTab.getX() - 59, 0);
+							btnAddTab.setLocation(btnAddTab.getX() - 58, 0);
 						}
-					} else if (e.getButton() == 1) {
-						if (tabs.get(tabbedPane.getSelectedIndex()).l_Vorgabe.getText() == "") {
-							createRandomKarte("In diesem Fach sind noch keine Wörter");
-						} else {
-							updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
+					}
+				}
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (e.getButton() == 1) {
+						selectedTab = tabbedPane.getSelectedIndex();
+						int left = 58 * tabbedPane.getSelectedIndex();
+						int right = (58 * tabbedPane.getSelectedIndex()) + 58;
+						if (e.getX() >= left && e.getX() <= right && e.getY() > 0 && e.getY() < 20) {
+							if (tabs.get(tabbedPane.getSelectedIndex()).l_Vorgabe.getText() == "") {
+								createRandomKarte("In diesem Fach sind noch keine Wörter");
+							} else {
+								updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
+							}
 						}
 					}
 				}
@@ -226,7 +236,7 @@ public class GUI_Main extends JFrame
 
 			getContentPane().add(btnAddTab);
 			getContentPane().add(tabbedPane);
-			
+
 			updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
 			createRandomKarte("In diesem Fach sind keine weiteren Wörter");
 			tabs.get(tabbedPane.getSelectedIndex()).eingabe.setText("");
@@ -239,7 +249,7 @@ public class GUI_Main extends JFrame
 
 	public void createRandomKarte(String text) {
 		Karte randomKarte = VokabeltrainerDB.getZufaelligeKarte(chosenKartei.getNummer(),
-				tabbedPane.getSelectedIndex()+1);
+				tabbedPane.getSelectedIndex() + 1);
 		if (randomKarte == null) {
 			currentKarte = null;
 			updateCenterDialog(Color.RED, text);
@@ -263,11 +273,11 @@ public class GUI_Main extends JFrame
 
 	public void checkEntry() {
 		if (!tabs.get(tabbedPane.getSelectedIndex()).eingabe.getText().isEmpty()) {
-			
+
 			if (currentKarte != null) {
-				
+
 				if (currentKarte.getRichtig(tabs.get(tabbedPane.getSelectedIndex()).eingabe.getText())) {
-					
+
 					new Thread(new Runnable() {
 
 						@Override
