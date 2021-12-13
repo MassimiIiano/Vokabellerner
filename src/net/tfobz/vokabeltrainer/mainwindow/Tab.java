@@ -17,9 +17,11 @@ import net.tfobz.vokabeltrainer.model.*;
 public class Tab extends JPanel
 {
 
-	JLabel l_Falsch = new JLabel("");
+	JLabel l_centerDialog = new JLabel("");
 	JLabel l_Vorgabe = new JLabel("");
 	JTextField eingabe = new JTextField();
+	JButton btnMinus = new JButton("-");
+	JButton btnPlus = new JButton("+");
 	/**
 	 * Create the application.
 	 */
@@ -37,33 +39,23 @@ public class Tab extends JPanel
 		}
 		this.add(l_Vorgabe);
 		
-		eingabe.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		eingabe.setBounds(149, 209, 450, 50);
-		eingabe.setColumns(10);
+		this.eingabe.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		this.eingabe.setBounds(149, 209, 450, 50);
+		this.eingabe.setColumns(10);
 		this.add(eingabe);
 		
-		JButton btnPlus = new JButton("+");
-		btnPlus.setToolTipText("Füge ein Wort der Liste hinzu");
-		btnPlus.setFont(new Font("Tahoma", Font.BOLD, 30));
-		btnPlus.setBorder(null);
-		btnPlus.setBackground(new Color(240,240,240));
-		btnPlus.setBounds(305, 105, 40, 40);
+		this.btnPlus.setToolTipText("Füge ein Wort der Liste hinzu");
+		this.btnPlus.setFont(new Font("Tahoma", Font.BOLD, 30));
+		this.btnPlus.setBorder(null);
+		this.btnPlus.setBackground(new Color(240,240,240));
+		this.btnPlus.setBounds(305, 105, 40, 40);
 		this.add(btnPlus);
 		
-		JButton btnMinus = new JButton("-");
-		btnMinus.setToolTipText("Lösche ein Wort aus der Liste");
-		btnMinus.setFont(new Font("Tahoma", Font.BOLD, 30));
-		btnMinus.setBorder(null);
-		btnMinus.setBackground(new Color(240,240,240));
-		btnMinus.setBounds(412, 105, 40, 40);
-		btnMinus.addMouseListener(new MouseAdapter() {
-
-			@SuppressWarnings("static-access")
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				new JOptionPane().showConfirmDialog(Tab.this, "Möchten sie dieses Wort aus der Liste entfernen?", "Wort Löschen", JOptionPane.YES_NO_OPTION);
-			}
-		});
+		this.btnMinus.setToolTipText("Lösche ein Wort aus der Liste");
+		this.btnMinus.setFont(new Font("Tahoma", Font.BOLD, 30));
+		this.btnMinus.setBorder(null);
+		this.btnMinus.setBackground(new Color(240,240,240));
+		this.btnMinus.setBounds(412, 105, 40, 40);
 		this.add(btnMinus);
 		
 		JButton btnEinstellungen = new JButton("Einstellungen");
@@ -77,10 +69,10 @@ public class Tab extends JPanel
 		});
 		this.add(btnEinstellungen);
 		
-		this.l_Falsch.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		this.l_Falsch.setHorizontalAlignment(SwingConstants.CENTER);
-		this.l_Falsch.setBounds(0, 162, 734, 30);
-		this.add(l_Falsch);
+		this.l_centerDialog.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		this.l_centerDialog.setHorizontalAlignment(SwingConstants.CENTER);
+		this.l_centerDialog.setBounds(0, 162, 734, 30);
+		this.add(l_centerDialog);
 		
 		this.setVisible(true);
 	}

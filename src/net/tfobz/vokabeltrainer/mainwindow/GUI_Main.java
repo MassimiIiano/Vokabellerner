@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -74,6 +75,71 @@ public class GUI_Main extends JFrame
 			}
 			for (int i = 0; i < 3; i++) {
 				Tab tab = new Tab(chosenKartei, tabbedPane);
+				tab.btnMinus.addMouseListener(new MouseAdapter() {
+
+					@SuppressWarnings("static-access")
+					@Override
+					public void mouseClicked(MouseEvent e) {
+
+						if (e.getButton() == 1) {
+							int decision = new JOptionPane().showConfirmDialog(GUI_Main.this,
+									"Möchten sie dieses Wort aus der Liste entfernen?", "Wort Löschen", JOptionPane.YES_NO_OPTION);
+							if (decision == JOptionPane.YES_OPTION) {
+
+								VokabeltrainerDB.loeschenKarte(currentKarte.getNummer());
+								updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
+								createRandomKarte("In diesem Fach sind keine weiteren Wörter");
+								tabs.get(tabbedPane.getSelectedIndex()).eingabe.setText("");
+
+							} else {
+								return;
+							}
+						}
+					}
+				});
+
+				tab.btnPlus.addMouseListener(new MouseAdapter() {
+
+					@Override
+					public void mouseClicked(MouseEvent e) {
+
+						if(e.getButton() == 1) {
+							NewWordDialog newWord = new NewWordDialog();
+							newWord.labels[0].setText(chosenKartei.getWortEinsBeschreibung());
+							newWord.labels[1].setText(chosenKartei.getWortZweiBeschreibung());
+							newWord.btn_ok.addMouseListener(new MouseAdapter() {
+								
+								@Override
+								public void mouseClicked(MouseEvent e) {
+									
+									if(e.getButton() == 1) {
+										if(!newWord.textFields[0].getText().isEmpty() &&
+												!newWord.textFields[1].getText().isEmpty()) {
+											Karte k = new Karte();
+											k.setWortEins(newWord.textFields[0].getText());
+											k.setWortZwei(newWord.textFields[1].getText());
+											int check = VokabeltrainerDB.hinzufuegenKarte(chosenKartei.getNummer(), k);
+											if(check == 0) {
+												newWord.dispose();
+												JOptionPane.showMessageDialog(GUI_Main.this, "Wort erfolgreich hinzugefügt",
+														"Neues Wort", JOptionPane.INFORMATION_MESSAGE);
+											} else {
+												JOptionPane.showMessageDialog(newWord, "Ein Fehler ist aufgetreten!", "Fehler bei hinzufügen",
+														JOptionPane.ERROR_MESSAGE);
+											}
+										} else {
+											JOptionPane.showMessageDialog(newWord, "Keine Wörter eingegeben!", "Fehler bei Eingabe",
+													JOptionPane.ERROR_MESSAGE);
+										}
+									}
+									
+								}
+							});
+						}
+						
+					}
+				});
+
 				tab.eingabe.addKeyListener(new KeyAdapter() {
 
 					@Override
@@ -88,7 +154,7 @@ public class GUI_Main extends JFrame
 
 											@Override
 											public void run() {
-												updateLabelFalsch(Color.GREEN,
+												updateCenterDialog(Color.GREEN,
 														"Richtig! Die Antwort lautet '" + currentKarte.getWortZwei() + "'");
 												synchronized (this) {
 													try {
@@ -98,7 +164,7 @@ public class GUI_Main extends JFrame
 													}
 												}
 												VokabeltrainerDB.setKarteRichtig(currentKarte);
-												updateLabelFalsch(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
+												updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
 												createRandomKarte("In diesem Fach sind keine weiteren Wörter");
 												tabs.get(tabbedPane.getSelectedIndex()).eingabe.setText("");
 											}
@@ -108,7 +174,7 @@ public class GUI_Main extends JFrame
 
 											@Override
 											public void run() {
-												updateLabelFalsch(Color.RED,
+												updateCenterDialog(Color.RED,
 														"Falsch! Die Antwort lautet '" + currentKarte.getWortZwei() + "'");
 												synchronized (this) {
 													try {
@@ -118,7 +184,7 @@ public class GUI_Main extends JFrame
 													}
 												}
 												VokabeltrainerDB.setKarteFalsch(currentKarte);
-												updateLabelFalsch(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
+												updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
 												createRandomKarte("In diesem Fach sind keine weiteren Wörter");
 												tabs.get(tabbedPane.getSelectedIndex()).eingabe.setText("");
 											}
@@ -130,7 +196,7 @@ public class GUI_Main extends JFrame
 
 									@Override
 									public void run() {
-										updateLabelFalsch(Color.RED, "Keine Antwort eingegeben!");
+										updateCenterDialog(Color.RED, "Keine Antwort eingegeben!");
 										synchronized (this) {
 											try {
 												this.wait(1000);
@@ -138,7 +204,7 @@ public class GUI_Main extends JFrame
 												e.printStackTrace();
 											}
 										}
-										updateLabelFalsch(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
+										updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
 									}
 								}).start();
 							}
@@ -163,7 +229,7 @@ public class GUI_Main extends JFrame
 						if (tabs.get(tabbedPane.getSelectedIndex()).l_Vorgabe.getText() == "") {
 							createRandomKarte("In diesem Fach sind noch keine Wörter");
 						} else {
-							updateLabelFalsch(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
+							updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
 						}
 					}
 				}
@@ -186,10 +252,12 @@ public class GUI_Main extends JFrame
 			getContentPane().add(btnAddTab);
 			getContentPane().add(tabbedPane);
 
-			setVisible(true);
-		} else
+			updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
+			createRandomKarte("In diesem Fach sind keine weiteren Wörter");
+			tabs.get(tabbedPane.getSelectedIndex()).eingabe.setText("");
 
-		{
+			setVisible(true);
+		} else {
 			this.dispose();
 		}
 	}
@@ -199,18 +267,18 @@ public class GUI_Main extends JFrame
 				tabbedPane.getSelectedIndex() + 1);
 		if (randomKarte == null) {
 			currentKarte = null;
-			updateLabelFalsch(Color.RED, text);
+			updateCenterDialog(Color.RED, text);
 			tabs.get(tabbedPane.getSelectedIndex()).l_Vorgabe.setText("");
 		} else {
 			currentKarte = randomKarte;
 			tabs.get(tabbedPane.getSelectedIndex()).l_Vorgabe.setText(randomKarte.getWortEins());
-			updateLabelFalsch(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
+			updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
 		}
 	}
 
-	public boolean updateLabelFalsch(Color color, String text) {
-		tabs.get(tabbedPane.getSelectedIndex()).l_Falsch.setForeground(color);
-		tabs.get(tabbedPane.getSelectedIndex()).l_Falsch.setText(text);
+	public boolean updateCenterDialog(Color color, String text) {
+		tabs.get(tabbedPane.getSelectedIndex()).l_centerDialog.setForeground(color);
+		tabs.get(tabbedPane.getSelectedIndex()).l_centerDialog.setText(text);
 		return false;
 	}
 
