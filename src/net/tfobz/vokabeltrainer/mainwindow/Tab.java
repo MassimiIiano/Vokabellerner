@@ -8,30 +8,39 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import net.tfobz.vokabeltrainer.model.*;
 
 public class Tab extends JPanel
 {
 
+	JLabel l_Falsch = new JLabel("");
+	JLabel l_Vorgabe = new JLabel("");
+	JTextField eingabe = new JTextField();
 	/**
 	 * Create the application.
 	 */
-	public Tab() {
+	public Tab(Lernkartei chosenKartei, JTabbedPane tabbedPane) {
 		this.setBounds(0 , 0, 744, 346);
 		this.setLayout(null);
 		
-		JLabel lblVorgabe = new JLabel("Vorgabe");
-		lblVorgabe.setHorizontalAlignment(SwingConstants.CENTER);
-		lblVorgabe.setFont(new Font("Tahoma", Font.PLAIN, 60));
-		lblVorgabe.setBounds(149, 10, 450, 73);
-		this.add(lblVorgabe);
+		this.l_Vorgabe.setHorizontalAlignment(SwingConstants.CENTER);
+		this.l_Vorgabe.setFont(new Font("Tahoma", Font.PLAIN, 60));
+		this.l_Vorgabe.setBounds(149, 10, 450, 73);
 		
-		JTextField Eingabe = new JTextField();
-		Eingabe.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		Eingabe.setBounds(149, 209, 450, 50);
-		Eingabe.setColumns(10);
-		this.add(Eingabe);
+		int selectedIndex = tabbedPane.getSelectedIndex();
+		if(selectedIndex == -1) {
+			selectedIndex = 0;
+		}
+		this.add(l_Vorgabe);
+		
+		eingabe.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		eingabe.setBounds(149, 209, 450, 50);
+		eingabe.setColumns(10);
+		this.add(eingabe);
 		
 		JButton btnPlus = new JButton("+");
 		btnPlus.setToolTipText("Füge ein Wort der Liste hinzu");
@@ -68,11 +77,10 @@ public class Tab extends JPanel
 		});
 		this.add(btnEinstellungen);
 		
-		JLabel lblFalsch = new JLabel("falsch");
-		lblFalsch.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblFalsch.setHorizontalAlignment(SwingConstants.CENTER);
-		lblFalsch.setBounds(0, 162, 734, 30);
-		this.add(lblFalsch);
+		this.l_Falsch.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		this.l_Falsch.setHorizontalAlignment(SwingConstants.CENTER);
+		this.l_Falsch.setBounds(0, 162, 734, 30);
+		this.add(l_Falsch);
 		
 		this.setVisible(true);
 	}
