@@ -1,11 +1,9 @@
 # Vokabellerner
 
-If the ChooseDate.java file is corrupted or the error 
+If the files are corrupted and if there is only one library in the build path,
 
-"Exception in thread "AWT-EventQueue-0" java.lang.Error: Unresolved compilation problems:" 
+try adding the JARs from the lib folder to your Build Path.
 
-appears, try do download the JDatePicker_1.3.4 from the link below and include it in the buildpath.
-
-(Right-Click on Project -> Build Path -> Configure Build Path ->Add External JARs... -> Select the file you downloaded -> Apply and Close)
+(Right-Click on Project -> Build Path -> Configure Build Path ->Add JARs... -> Select the files in Vokabellerner/lib -> Apply and Close)
 
 https://sourceforge.net/projects/jdatepicker/files/latest/download
