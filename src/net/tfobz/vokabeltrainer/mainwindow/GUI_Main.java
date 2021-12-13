@@ -27,6 +27,7 @@ public class GUI_Main extends JFrame
 	int selectedTab;
 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	ArrayList<Tab> tabs = new ArrayList<Tab>();
+	int karteiNummer = -1;
 
 	/**
 	 * Launch the application.
@@ -50,29 +51,17 @@ public class GUI_Main extends JFrame
 		VokabeltrainerDB.loeschenLernkartei(0);
 
 		try {
-			chosenKartei = ChooseKartei.chooseKartei(this);
+			this.chosenKartei = ChooseKartei.chooseKartei(this);
 		} catch (NullPointerException e) {
 			this.dispose();
 		}
 
-		if (chosenKartei != null) {
+		if (this.chosenKartei != null) {
 
-			int karteiNummer = chosenKartei.getNummer();
+			this.karteiNummer = this.chosenKartei.getNummer();
 
-			VokabeltrainerDB.importierenKarten(karteiNummer, "Lernkarteien/" + chosenKartei.getBeschreibung() + ".txt");
-			for (int i = 1; i <= VokabeltrainerDB.getFaecher(chosenKartei.getNummer()).size(); i++) {
-
-				VokabeltrainerDB.aendernFach(new Fach(i, "Fach " + i, 0, new Date()));
-			}
-
-			if (VokabeltrainerDB.getFaecher(chosenKartei.getNummer()).size() < 3) {
-				int ersteFachNummer = VokabeltrainerDB.getFaecher(chosenKartei.getNummer()).size() + 1;
-				for (int i = ersteFachNummer; i <= 3; i++) {
-					VokabeltrainerDB.hinzufuegenFach(chosenKartei.getNummer(), new Fach());
-					VokabeltrainerDB.aendernFach(new Fach(i, "Fach " + i, 0, new Date()));
-				}
-			}
-
+			importKarten();
+			
 			JButton btnAddTab = new JButton("+");
 			btnAddTab.setBounds(178, 0, 20, 20);
 			btnAddTab.setBorder(null);
@@ -80,9 +69,9 @@ public class GUI_Main extends JFrame
 			btnAddTab.setToolTipText("Neues Fach hinzufügen");
 			btnAddTab.setBackground(new Color(238, 238, 238));
 
-			tabbedPane.setBounds(0, 0, 744, 346);
+			this.tabbedPane.setBounds(0, 0, 744, 346);
 			for (int i = 0; i < 3; i++) {
-				Tab tab = new Tab(chosenKartei, tabbedPane);
+				Tab tab = new Tab(this.chosenKartei, this.tabbedPane);
 				tab.btnMinus.addMouseListener(new MouseAdapter() {
 
 					@SuppressWarnings("static-access")
@@ -94,10 +83,10 @@ public class GUI_Main extends JFrame
 									"Möchten sie dieses Wort aus der Liste entfernen?", "Wort Löschen", JOptionPane.YES_NO_OPTION);
 							if (decision == JOptionPane.YES_OPTION) {
 
-								VokabeltrainerDB.loeschenKarte(currentKarte.getNummer());
+								VokabeltrainerDB.loeschenKarte(GUI_Main.this.currentKarte.getNummer());
 								updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
 								createRandomKarte("In diesem Fach sind keine weiteren Wörter");
-								tabs.get(tabbedPane.getSelectedIndex()).eingabe.setText("");
+								GUI_Main.this.tabs.get(GUI_Main.this.tabbedPane.getSelectedIndex()).eingabe.setText("");
 
 							} else {
 								return;
@@ -113,8 +102,8 @@ public class GUI_Main extends JFrame
 
 						if (e.getButton() == 1) {
 							NewWordDialog newWord = new NewWordDialog();
-							newWord.labels[0].setText(chosenKartei.getWortEinsBeschreibung());
-							newWord.labels[1].setText(chosenKartei.getWortZweiBeschreibung());
+							newWord.labels[0].setText(GUI_Main.this.chosenKartei.getWortEinsBeschreibung());
+							newWord.labels[1].setText(GUI_Main.this.chosenKartei.getWortZweiBeschreibung());
 							newWord.btn_ok.addMouseListener(new MouseAdapter() {
 
 								@Override
@@ -125,7 +114,7 @@ public class GUI_Main extends JFrame
 											Karte k = new Karte();
 											k.setWortEins(newWord.textFields[0].getText());
 											k.setWortZwei(newWord.textFields[1].getText());
-											int check = VokabeltrainerDB.hinzufuegenKarte(chosenKartei.getNummer(), k);
+											int check = VokabeltrainerDB.hinzufuegenKarte(GUI_Main.this.chosenKartei.getNummer(), k);
 											if (check == 0) {
 												JOptionPane.showMessageDialog(GUI_Main.this, "Wort erfolgreich hinzugefügt", "Neues Wort",
 														JOptionPane.INFORMATION_MESSAGE);
@@ -141,6 +130,14 @@ public class GUI_Main extends JFrame
 									}
 
 								}
+							});
+							newWord.btn_cancel.addMouseListener(new MouseAdapter() {
+								
+								@Override
+								public void mouseClicked(MouseEvent e) {
+									newWord.dispose();
+								}
+								
 							});
 						}
 
@@ -177,27 +174,37 @@ public class GUI_Main extends JFrame
 					public void mouseClicked(MouseEvent e) {
 
 						if (e.getButton() == 1) {
-
+							VokabeltrainerDB.exportierenKarten(GUI_Main.this.chosenKartei.getNummer(),
+									"Lernkarteien/" + GUI_Main.this.chosenKartei.getBeschreibung() + ".txt", true);
+							VokabeltrainerDB.aendernLernkartei(new Lernkartei(GUI_Main.this.chosenKartei.getNummer(),
+									GUI_Main.this.chosenKartei.getBeschreibung(), GUI_Main.this.chosenKartei.getWortEinsBeschreibung(),
+									GUI_Main.this.chosenKartei.getWortZweiBeschreibung(), !GUI_Main.this.chosenKartei.getRichtung(),
+									GUI_Main.this.chosenKartei.getGrossKleinschreibung()));
+							VokabeltrainerDB.loeschenAlleFaecher(GUI_Main.this.chosenKartei.getNummer());
+							importKarten();
+							updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
+							createRandomKarte("In diesem Fach sind keine weiteren Wörter");
+							GUI_Main.this.tabs.get(GUI_Main.this.tabbedPane.getSelectedIndex()).eingabe.setText("");
 						}
 
 					}
 				});
-				tabs.add(tab);
-				tabbedPane.addTab("Fach " + (i + 1), tabs.get(i));
+				this.tabs.add(tab);
+				this.tabbedPane.addTab("Fach " + (i + 1), this.tabs.get(i));
 			}
 
-			tabbedPane.addMouseListener(new MouseAdapter() {
+			this.tabbedPane.addMouseListener(new MouseAdapter() {
 
 				@Override
 				public void mousePressed(MouseEvent e) {
 					if (e.getButton() == 2) {
-						tabbedPane.setSelectedIndex(selectedTab);
-						int left = 58 * (tabbedPane.getTabCount() - 1);
-						int right = 58 * (tabbedPane.getTabCount() - 1) + 58;
+						GUI_Main.this.tabbedPane.setSelectedIndex(GUI_Main.this.selectedTab);
+						int left = 58 * (GUI_Main.this.tabbedPane.getTabCount() - 1);
+						int right = 58 * (GUI_Main.this.tabbedPane.getTabCount() - 1) + 58;
 						if (e.getX() >= left && e.getX() <= right && e.getY() > 0 && e.getY() < 20) {
-							int fachNummer = tabbedPane.getTabCount();
-							VokabeltrainerDB.loeschenFach(karteiNummer, fachNummer);
-							tabbedPane.remove(tabbedPane.getTabCount() - 1);
+							int fachNummer = GUI_Main.this.tabbedPane.getTabCount();
+							VokabeltrainerDB.loeschenFach(GUI_Main.this.karteiNummer, fachNummer);
+							GUI_Main.this.tabbedPane.remove(GUI_Main.this.tabbedPane.getTabCount() - 1);
 							btnAddTab.setLocation(btnAddTab.getX() - 58, 0);
 						}
 					}
@@ -206,11 +213,13 @@ public class GUI_Main extends JFrame
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					if (e.getButton() == 1) {
-						selectedTab = tabbedPane.getSelectedIndex();
-						int left = 58 * tabbedPane.getSelectedIndex();
-						int right = (58 * tabbedPane.getSelectedIndex()) + 58;
+						GUI_Main.this.selectedTab = GUI_Main.this.tabbedPane.getSelectedIndex();
+						int left = 58 * GUI_Main.this.tabbedPane.getSelectedIndex();
+						int right = (58 * GUI_Main.this.tabbedPane.getSelectedIndex()) + 58;
 						if (e.getX() >= left && e.getX() <= right && e.getY() > 0 && e.getY() < 20) {
-							if (tabs.get(tabbedPane.getSelectedIndex()).l_Vorgabe.getText() == "") {
+							if (GUI_Main.this.tabs.get(GUI_Main.this.tabbedPane.getSelectedIndex()).l_Vorgabe.getText() == "" &&
+									VokabeltrainerDB.getZufaelligeKarte(GUI_Main.this.chosenKartei.getNummer(),
+											GUI_Main.this.tabbedPane.getSelectedIndex() + 1) == null) {
 								createRandomKarte("In diesem Fach sind noch keine Wörter");
 							} else {
 								updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
@@ -223,23 +232,23 @@ public class GUI_Main extends JFrame
 
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					if (tabbedPane.getTabCount() < 12) {
-						int fachNmber = VokabeltrainerDB.getFaecher(karteiNummer).size() + 1;
-						VokabeltrainerDB.hinzufuegenFach(karteiNummer, new Fach());
+					if (GUI_Main.this.tabbedPane.getTabCount() < 12) {
+						int fachNmber = VokabeltrainerDB.getFaecher(GUI_Main.this.karteiNummer).size() + 1;
+						VokabeltrainerDB.hinzufuegenFach(GUI_Main.this.karteiNummer, new Fach());
 						VokabeltrainerDB.aendernFach(new Fach(fachNmber, "Fach " + fachNmber, 0, new Date()));
-						tabs.add(new Tab(chosenKartei, tabbedPane));
-						tabbedPane.addTab("Fach " + fachNmber, tabs.get(tabs.size() - 1));
+						GUI_Main.this.tabs.add(new Tab(GUI_Main.this.chosenKartei, GUI_Main.this.tabbedPane));
+						GUI_Main.this.tabbedPane.addTab("Fach " + fachNmber, GUI_Main.this.tabs.get(GUI_Main.this.tabs.size() - 1));
 						btnAddTab.setLocation(btnAddTab.getX() + 59, 0);
 					}
 				}
 			});
 
 			getContentPane().add(btnAddTab);
-			getContentPane().add(tabbedPane);
+			getContentPane().add(this.tabbedPane);
 
 			updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
 			createRandomKarte("In diesem Fach sind keine weiteren Wörter");
-			tabs.get(tabbedPane.getSelectedIndex()).eingabe.setText("");
+			this.tabs.get(this.tabbedPane.getSelectedIndex()).eingabe.setText("");
 
 			setVisible(true);
 		} else {
@@ -248,18 +257,18 @@ public class GUI_Main extends JFrame
 	}
 
 	public void createRandomKarte(String text) {
-		Karte randomKarte = VokabeltrainerDB.getZufaelligeKarte(chosenKartei.getNummer(),
-				tabbedPane.getSelectedIndex() + 1);
+		Karte randomKarte = VokabeltrainerDB.getZufaelligeKarte(this.chosenKartei.getNummer(),
+				this.tabbedPane.getSelectedIndex() + 1);
 		if (randomKarte == null) {
-			currentKarte = null;
+			this.currentKarte = null;
 			updateCenterDialog(Color.RED, text);
-			tabs.get(tabbedPane.getSelectedIndex()).l_Vorgabe.setText("");
+			this.tabs.get(this.tabbedPane.getSelectedIndex()).l_Vorgabe.setText("");
 		} else {
-			currentKarte = randomKarte;
-			if (VokabeltrainerDB.getLernkartei(chosenKartei.getNummer()).getRichtung()) {
-				tabs.get(tabbedPane.getSelectedIndex()).l_Vorgabe.setText(randomKarte.getWortEins());
+			this.currentKarte = randomKarte;
+			if (VokabeltrainerDB.getLernkartei(this.chosenKartei.getNummer()).getRichtung()) {
+				this.tabs.get(this.tabbedPane.getSelectedIndex()).l_Vorgabe.setText(randomKarte.getWortEins());
 			} else {
-				tabs.get(tabbedPane.getSelectedIndex()).l_Vorgabe.setText(randomKarte.getWortZwei());
+				this.tabs.get(this.tabbedPane.getSelectedIndex()).l_Vorgabe.setText(randomKarte.getWortZwei());
 			}
 			updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
 		}
@@ -272,17 +281,17 @@ public class GUI_Main extends JFrame
 	}
 
 	public void checkEntry() {
-		if (!tabs.get(tabbedPane.getSelectedIndex()).eingabe.getText().isEmpty()) {
+		if (!this.tabs.get(this.tabbedPane.getSelectedIndex()).eingabe.getText().isEmpty()) {
 
-			if (currentKarte != null) {
+			if (this.currentKarte != null) {
 
-				if (currentKarte.getRichtig(tabs.get(tabbedPane.getSelectedIndex()).eingabe.getText())) {
+				if (this.currentKarte.getRichtig(this.tabs.get(this.tabbedPane.getSelectedIndex()).eingabe.getText())) {
 
 					new Thread(new Runnable() {
 
 						@Override
 						public void run() {
-							updateCenterDialog(Color.GREEN, "Richtig! Die Antwort lautet '" + currentKarte.getWortZwei() + "'");
+							updateCenterDialog(Color.GREEN, "Richtig! Die Antwort lautet '" + GUI_Main.this.currentKarte.getWortZwei() + "'");
 							synchronized (this) {
 								try {
 									this.wait(1000);
@@ -290,10 +299,10 @@ public class GUI_Main extends JFrame
 									e.printStackTrace();
 								}
 							}
-							VokabeltrainerDB.setKarteRichtig(currentKarte);
+							VokabeltrainerDB.setKarteRichtig(GUI_Main.this.currentKarte);
 							updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
 							createRandomKarte("In diesem Fach sind keine weiteren Wörter");
-							tabs.get(tabbedPane.getSelectedIndex()).eingabe.setText("");
+							GUI_Main.this.tabs.get(GUI_Main.this.tabbedPane.getSelectedIndex()).eingabe.setText("");
 						}
 					}).start();
 				} else {
@@ -301,7 +310,7 @@ public class GUI_Main extends JFrame
 
 						@Override
 						public void run() {
-							updateCenterDialog(Color.RED, "Falsch! Die Antwort lautet '" + currentKarte.getWortZwei() + "'");
+							updateCenterDialog(Color.RED, "Falsch! Die Antwort lautet '" + GUI_Main.this.currentKarte.getWortZwei() + "'");
 							synchronized (this) {
 								try {
 									this.wait(2500);
@@ -309,10 +318,10 @@ public class GUI_Main extends JFrame
 									e.printStackTrace();
 								}
 							}
-							VokabeltrainerDB.setKarteFalsch(currentKarte);
+							VokabeltrainerDB.setKarteFalsch(GUI_Main.this.currentKarte);
 							updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
 							createRandomKarte("In diesem Fach sind keine weiteren Wörter");
-							tabs.get(tabbedPane.getSelectedIndex()).eingabe.setText("");
+							GUI_Main.this.tabs.get(GUI_Main.this.tabbedPane.getSelectedIndex()).eingabe.setText("");
 						}
 					}).start();
 				}
@@ -336,4 +345,19 @@ public class GUI_Main extends JFrame
 		}
 	}
 
+	public void importKarten() {
+		VokabeltrainerDB.importierenKarten(this.karteiNummer, "Lernkarteien/" + this.chosenKartei.getBeschreibung() + ".txt");
+		for (int i = 1; i <= VokabeltrainerDB.getFaecher(this.chosenKartei.getNummer()).size(); i++) {
+			VokabeltrainerDB.aendernFach(new Fach(i, "Fach " + i, 0, new Date()));
+		}
+
+		if (VokabeltrainerDB.getFaecher(this.chosenKartei.getNummer()).size() < 3) {
+			int ersteFachNummer = VokabeltrainerDB.getFaecher(this.chosenKartei.getNummer()).size() + 1;
+			for (int i = ersteFachNummer; i <= 3; i++) {
+				VokabeltrainerDB.hinzufuegenFach(this.chosenKartei.getNummer(), new Fach());
+				VokabeltrainerDB.aendernFach(new Fach(i, "Fach " + i, 0, new Date()));
+			}
+		}
+	}
+	
 }
