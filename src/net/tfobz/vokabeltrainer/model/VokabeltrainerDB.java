@@ -1642,4 +1642,30 @@ public class VokabeltrainerDB
 			ret = new SimpleDateFormat("yyyy-MM-dd").format(date);
 		return ret;
 	}
+
+	public static int loeschenFach(int nummerLernkartei, int nummerFach) {
+		int ret = -1;
+		if (!(getLernkartei(nummerLernkartei) == null)) {
+			Connection con = null;
+			Statement stmt = null;
+			try {
+				con = getConnection();
+				stmt = con.createStatement();
+				String sql =
+						"DELETE FROM faecher " +
+						"  WHERE lnummer = " + nummerLernkartei + " AND" +
+						" fnummer = " + nummerFach + ";";
+				stmt.executeUpdate(sql);
+				con.commit();
+				ret = 0;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				ret = -1;
+			} finally {
+				try { stmt.close(); } catch (Exception e) { ; }
+				try { con.close(); } catch (Exception e) { ; }
+			}
+		}
+		return ret;
+	}
 }
