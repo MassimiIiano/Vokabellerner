@@ -13,7 +13,7 @@ public class ChooseKartei
 		List<Lernkartei> lernkarteien = VokabeltrainerDB.getLernkarteien();
 		if (lernkarteien.isEmpty()) {
 			VokabeltrainerDB
-					.hinzufuegenLernkartei(new Lernkartei("Vokabeltrainer Deutsch Englisch", "Deusch", "Englisch", false, false));
+					.hinzufuegenLernkartei(new Lernkartei("Vokabeltrainer Deutsch Englisch", "Deusch", "Englisch", true, false));
 			lernkarteien = VokabeltrainerDB.getLernkarteien();
 			if (!createDefaultFile()) {
 				JOptionPane.showMessageDialog(parent, "Fehler beim erstellen der Standartdatei", "Fehler",
