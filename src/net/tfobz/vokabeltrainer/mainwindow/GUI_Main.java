@@ -395,28 +395,6 @@ public class GUI_Main extends JFrame
 			}
 		});
 
-		tab.btnSwitch.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-
-				if (e.getButton() == 1) {
-					VokabeltrainerDB.exportierenKarten(GUI_Main.this.chosenKartei.getNummer(),
-							"Lernkarteien/" + GUI_Main.this.chosenKartei.getBeschreibung() + ".txt", true);
-					VokabeltrainerDB.aendernLernkartei(new Lernkartei(GUI_Main.this.chosenKartei.getNummer(),
-							GUI_Main.this.chosenKartei.getBeschreibung(), GUI_Main.this.chosenKartei.getWortEinsBeschreibung(),
-							GUI_Main.this.chosenKartei.getWortZweiBeschreibung(), !GUI_Main.this.chosenKartei.getRichtung(),
-							GUI_Main.this.chosenKartei.getGrossKleinschreibung()));
-					VokabeltrainerDB.loeschenAlleFaecher(GUI_Main.this.chosenKartei.getNummer());
-					importKarten();
-					updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
-					createRandomKarte("In diesem Fach sind keine weiteren Wörter");
-					GUI_Main.this.tabs.get(GUI_Main.this.tabbedPane.getSelectedIndex()).eingabe.setText("");
-				}
-
-			}
-		});
-
 		tab.btnEinstellungen.addMouseListener(new MouseAdapter() {
 
 			@Override

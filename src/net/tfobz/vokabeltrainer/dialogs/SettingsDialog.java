@@ -50,7 +50,7 @@ public class SettingsDialog extends JDialog
 		btnImport.setBounds(385, 117, 97, 25);
 		btnImport.addActionListener(e-> {
                 try {
-                    int nummer = VokabeltrainerDB.getLernkarteien().indexOf(ChooseKartei.chooKartei());
+                    int nummer = VokabeltrainerDB.getLernkarteien().indexOf(ChooseKartei.chooseKartei())+1;
                     if(nummer != 0) {
                         JFileChooser chooser = new JFileChooser();
                         chooser.showOpenDialog(SettingsDialog.this);
@@ -71,14 +71,15 @@ public class SettingsDialog extends JDialog
 		btnExport.setBounds(276, 117, 97, 25);
 		btnExport.addActionListener(e -> {
         	try {
-        		int nummer = VokabeltrainerDB.getLernkarteien().indexOf(ChooseKartei.chooKartei());
+        		int nummer = VokabeltrainerDB.getLernkarteien().indexOf(ChooseKartei.chooseKartei())+1;
         		if (nummer != 0) {
         			JFileChooser chooser = new JFileChooser();
         			chooser.showSaveDialog(SettingsDialog.this);
         			boolean mitFaecher = false;
         			if (JOptionPane.showConfirmDialog(SettingsDialog.this, "Auch die Faecher exportieren?", "FAECHER EXPORTIEREN", JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.YES_OPTION)
         				mitFaecher = true;
-        			VokabeltrainerDB.exportierenKarten(nummer, chooser.getSelectedFile().getAbsolutePath(), mitFaecher);
+        			System.out.println(nummer);
+        			System.out.println(VokabeltrainerDB.exportierenKarten(nummer, chooser.getSelectedFile().getAbsolutePath(), mitFaecher));
         		} else {
         			throw new InputMismatchException("Sie sollen eine Sprache aussuchen");
         		}
