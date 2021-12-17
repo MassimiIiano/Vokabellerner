@@ -146,7 +146,9 @@ public class GUI_Main extends JFrame
 						int fachNmber = VokabeltrainerDB.getFaecher(GUI_Main.this.karteiNummer).size() + 1;
 						VokabeltrainerDB.hinzufuegenFach(GUI_Main.this.karteiNummer, new Fach());
 						VokabeltrainerDB.aendernFach(new Fach(fachNmber, "Fach " + fachNmber, 0, new Date()));
-						GUI_Main.this.tabs.add(new Tab(GUI_Main.this.chosenKartei, GUI_Main.this.tabbedPane));
+						Tab tab = new Tab(GUI_Main.this.chosenKartei, GUI_Main.this.tabbedPane);
+						addTabListener(tab);
+						GUI_Main.this.tabs.add(tab);
 						GUI_Main.this.tabbedPane.addTab("Fach " + fachNmber, GUI_Main.this.tabs.get(GUI_Main.this.tabs.size() - 1));
 						GUI_Main.this.currentKarte.add(new Karte());
 						btnAddTab.setLocation(btnAddTab.getX() + 59, 0);
@@ -235,7 +237,7 @@ public class GUI_Main extends JFrame
 									e.printStackTrace();
 								}
 							}
-							VokabeltrainerDB.setKarteFalsch(GUI_Main.this.currentKarte.get(GUI_Main.this.selectedTab));
+							System.out.println(VokabeltrainerDB.setKarteFalsch(GUI_Main.this.currentKarte.get(GUI_Main.this.selectedTab)));
 							updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
 							createRandomKarte("In diesem Fach sind keine weiteren Wörter");
 							GUI_Main.this.tabs.get(GUI_Main.this.tabbedPane.getSelectedIndex()).eingabe.setText("");
