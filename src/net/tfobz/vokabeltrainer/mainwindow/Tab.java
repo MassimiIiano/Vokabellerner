@@ -2,7 +2,6 @@ package net.tfobz.vokabeltrainer.mainwindow;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.*;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -12,7 +11,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import net.tfobz.vokabeltrainer.dialogs.SettingsDialog;
 import net.tfobz.vokabeltrainer.model.*;
 
 public class Tab extends JPanel {

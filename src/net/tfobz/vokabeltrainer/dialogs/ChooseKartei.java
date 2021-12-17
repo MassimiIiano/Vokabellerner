@@ -18,7 +18,7 @@ public class ChooseKartei
 			if (!createDefaultFile()) {
 				JOptionPane.showMessageDialog(parent, "Fehler beim erstellen der Standartdatei", "Fehler",
 						JOptionPane.ERROR_MESSAGE);
-				parent.dispose();
+				((JFrame) parent).dispose();
 				return null;
 			}
 		}
@@ -27,6 +27,10 @@ public class ChooseKartei
 				JOptionPane.QUESTION_MESSAGE, null, list, "Waehle deine Kartei");
 		// Lernkartei test = (Lernkartei) ret;
 		return (Lernkartei) ret;
+	}
+
+	public static Lernkartei chooKartei() {
+		return chooseKartei(new JFrame());
 	}
 
 	public static boolean createDefaultFile() {
