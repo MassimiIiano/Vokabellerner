@@ -18,11 +18,14 @@ import java.awt.event.MouseEvent;
 import java.util.Calendar;
 import java.util.Properties;
 
-public class ErrinerungDialog extends JFrame
+public class ErrinerungDialog
 {
 
-	JFrame frame = new JFrame();
-	JLabel l_mitDatum;
+	public JFrame frame = new JFrame();
+	public JLabel l_mitDatum;
+	public JButton btn_ok = new JButton("Errinerung setzten");
+	public JTextField tf_value = new JTextField();
+	public ChooseDate cal;
 
 	/**
 	 * Launch the application.
@@ -43,15 +46,15 @@ public class ErrinerungDialog extends JFrame
 	 * Create the application.
 	 */
 	public ErrinerungDialog() {
-		frame.setBounds((Toolkit.getDefaultToolkit().getScreenSize().width / 2) - 275,
-				(Toolkit.getDefaultToolkit().getScreenSize().height / 2) - 91, 550, 182);
+		frame.setBounds((Toolkit.getDefaultToolkit().getScreenSize().width / 2) - 280,
+				(Toolkit.getDefaultToolkit().getScreenSize().height / 2) - 62, 560, 124);
 		frame.setResizable(false);
 		frame.setTitle("Errinerung einstellen");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		FlowLayout layout = new FlowLayout();
 		frame.getContentPane().setLayout(layout);
-		layout.setAlignment(FlowLayout.TRAILING);
-		layout.setVgap(15);
+		layout.setAlignment(FlowLayout.CENTER);
+		layout.setVgap(10);
 
 		UtilDateModel model = new UtilDateModel();
 		Properties p = new Properties();
@@ -62,70 +65,30 @@ public class ErrinerungDialog extends JFrame
 		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
 		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateFormat());
 
-		ChooseDate cal = new ChooseDate(l_mitDatum, datePicker);
+		cal = new ChooseDate(datePicker);
 
 		JPanel panelPeriodisch = new JPanel();
 		panelPeriodisch.setLayout(new FlowLayout());
 		Font basic = new Font("Tahoma", Font.PLAIN, 23);
-		JLabel l_title1 = new JLabel("Errinern alle:");
+		JLabel l_title1 = new JLabel("oder errinern in:");
 		l_title1.setFont(basic);
-		JTextField tf_values[] = new JTextField[3];
 
-		JLabel l_labels[] = new JLabel[3];
-		l_labels[0] = new JLabel("Wochen");
-		l_labels[1] = new JLabel("Tage");
-		l_labels[2] = new JLabel("Stunden");
+		JLabel l_days = new JLabel();
+		l_days = new JLabel("Tagen");
 
-		for (int i = 0; i < 3; i++) {
-			tf_values[i] = new JTextField("");
-			tf_values[i].setPreferredSize(new Dimension(50, 25));
-			tf_values[i].addKeyListener(new TextFieldKeyHoerer());
-			l_labels[i].setFont(basic);
-			l_labels[i].setSize(20, 25);
-		}
+		tf_value = new JTextField("");
+		tf_value.setPreferredSize(new Dimension(50, 25));
+		tf_value.addKeyListener(new TextFieldKeyHoerer());
+		
+		l_days.setFont(basic);
+		l_days.setSize(20, 25);
 
 		panelPeriodisch.add(l_title1);
-		System.out.println(tf_values[0].getText());
-		for (int i = 0; i < 3; i++) {
-			panelPeriodisch.add(tf_values[i]);
-			panelPeriodisch.add(l_labels[i]);
-		}
+		panelPeriodisch.add(tf_value);
+		panelPeriodisch.add(l_days);
 
-		l_mitDatum = new JLabel("Oder am dd-MM-yyyy errinern:");
+		l_mitDatum = new JLabel("Am dd-MM-yyyy errinern:");
 		l_mitDatum.setFont(basic);
-
-		JButton btn_ok = new JButton("Errinerung setzten");
-		btn_ok.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-
-				if (tf_values[0].getText().isEmpty() && tf_values[1].getText().isEmpty() && tf_values[2].getText().isEmpty()) {
-
-					try {
-						final String calDatum = cal.getDateAsString();
-						l_mitDatum.setText("Oder am " + calDatum + " errinern:");
-					} catch (NullPointerException f) {
-						JOptionPane.showMessageDialog(ErrinerungDialog.this, "Es wurde keine Zeit oder Datum festgelegt!",
-								"Errinerung setzten", JOptionPane.ERROR_MESSAGE);
-					}
-				} else {
-
-					try {
-						cal.getDateAsString();
-					} catch (NullPointerException f) {
-						System.out.println("in Catch");
-
-						// Setzte Errinerung mit Werten aus TextFeldern
-
-						return;
-					}
-					JOptionPane.showMessageDialog(ErrinerungDialog.this,
-							"Es kann nicht eine Zeit und ein Datum gleichzeitig festgelegt werden", "Errinerung setzten",
-							JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		});
 
 		JButton btn_cancel = new JButton("Abbrechen");
 		btn_cancel.addMouseListener(new MouseAdapter() {
@@ -136,9 +99,9 @@ public class ErrinerungDialog extends JFrame
 			}
 		});
 
-		frame.getContentPane().add(panelPeriodisch);
 		frame.getContentPane().add(l_mitDatum);
 		frame.getContentPane().add(cal);
+		frame.getContentPane().add(panelPeriodisch);
 		frame.getContentPane().add(btn_ok);
 		frame.getContentPane().add(btn_cancel);
 		frame.setVisible(true);
@@ -166,7 +129,7 @@ public class ErrinerungDialog extends JFrame
 				} else if (tf.getText().length() == 2) {
 
 					String before = tf.getText();
-					
+
 					if (before.matches("\\d{2}")) {
 						tf.setText(before);
 					} else if (before.matches("\\d{1}[a-zA-Z]{1}")) {
@@ -176,9 +139,9 @@ public class ErrinerungDialog extends JFrame
 				} else {
 
 					String before = tf.getText();
-					if(before.matches("\\d{2}\\w*")) {
+					if (before.matches("\\d{2}\\w*")) {
 						tf.setText(before.substring(0, 2));
-					} else if(before.matches("\\d{1}[a-zA-Z]*")) {
+					} else if (before.matches("\\d{1}[a-zA-Z]*")) {
 						tf.setText(String.valueOf(before.charAt(0)));
 					}
 				}
@@ -186,12 +149,4 @@ public class ErrinerungDialog extends JFrame
 		}
 	}
 
-	public void waitBeforeChange(long timeout) {
-		synchronized (this) {
-			try {
-				wait(timeout);
-			} catch (InterruptedException e1) {
-			}
-		}
-	}
 }

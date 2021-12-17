@@ -5,12 +5,19 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -28,6 +35,7 @@ public class GUI_Main extends JFrame
 	JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	ArrayList<Tab> tabs = new ArrayList<Tab>();
 	int karteiNummer = -1;
+	SettingsDialog sd;
 
 	/**
 	 * Launch the application.
@@ -48,10 +56,9 @@ public class GUI_Main extends JFrame
 		this.setResizable(false);
 		getContentPane().setLayout(null);
 
-		// VokabeltrainerDB.loeschenLernkartei(0);
-		
-		//Zeigt Benutzer Auswahl aller gefundenen Lernkarteien, falls keine vorhanden ist, wird eine Starterkartei erstellt.
-		//Die Auswahl des Benutzer wird in einer Variable gespeichert.
+		// Zeigt Benutzer Auswahl aller gefundenen Lernkarteien, falls keine vorhanden
+		// ist, wird eine Starterkartei erstellt.
+		// Die Auswahl des Benutzer wird in einer Variable gespeichert.
 		try {
 			this.chosenKartei = ChooseKartei.chooseKartei(this);
 		} catch (NullPointerException e) {
@@ -62,9 +69,11 @@ public class GUI_Main extends JFrame
 
 			this.karteiNummer = this.chosenKartei.getNummer();
 
-			//Importiert die Karten der Lernkartei und gibt sie in das richtige Fach, falls keine angegeben wurde, werden die
-			//Karten in eine neues Fach gelegt. Falls bis zum Abschluss jenes Prozesses, weniger als 3 Fächer erstellt wurden,
-			//erstellt das Programm automatisch alle fehlenden bis zu insgesamt 3 Fächern.
+			// Importiert die Karten der Lernkartei und gibt sie in das richtige Fach, falls
+			// keine angegeben wurde, werden die
+			// Karten in eine neues Fach gelegt. Falls bis zum Abschluss jenes Prozesses,
+			// weniger als 3 Fächer erstellt wurden,
+			// erstellt das Programm automatisch alle fehlenden bis zu insgesamt 3 Fächern.
 			importKarten();
 
 			JButton btnAddTab = new JButton("+");
@@ -75,47 +84,52 @@ public class GUI_Main extends JFrame
 			btnAddTab.setBackground(new Color(238, 238, 238));
 
 			this.tabbedPane.setBounds(0, 0, 744, 346);
-			
-			//Erstell die anfänglichen Tabs und weist ihnen die Zuhörer zu, je nachdem wie viele Fächer importiert wurden; mind. 3
+
+			// Erstell die anfänglichen Tabs und weist ihnen die Zuhörer zu, je nachdem wie
+			// viele Fächer importiert wurden; mind. 3
 			for (int i = 0; i < VokabeltrainerDB.getFaecher(this.chosenKartei.getNummer()).size(); i++) {
 				Tab tab = new Tab(this.chosenKartei, this.tabbedPane);
-				
+
 				addTabListener(tab);
-				
+
 				this.tabs.add(tab);
 				this.tabbedPane.addTab("Fach " + (i + 1), this.tabs.get(i));
 			}
 
-			//Der TabbedPane und dem '+'-Knopf neben den Tabs (graphisch) werden Maushörer zugewiesen 
+			// Der TabbedPane und dem '+'-Knopf neben den Tabs (graphisch) werden Maushörer
+			// zugewiesen
 			this.tabbedPane.addMouseListener(new MouseAdapter() {
 
 				@Override
 				public void mousePressed(MouseEvent e) {
-					//Falls Mausrad-Knopf, soll Tab gelöscht werden
+					// Falls Mausrad-Knopf, soll Tab gelöscht werden
 					if (e.getButton() == 2) {
-						//Damit diese Löschen-Funktion nicht Tab wechselt sobald das Mausrad gedrückt wird, wird auf den
-						//letzten aufgerufenen Tab gewechselt
+						// Damit diese Löschen-Funktion nicht Tab wechselt sobald das Mausrad gedrückt
+						// wird, wird auf den
+						// letzten aufgerufenen Tab gewechselt
 						GUI_Main.this.tabbedPane.setSelectedIndex(GUI_Main.this.selectedTab);
-						
-						//Überprüft ob innerhalb der Fläche des letzten Tabs gedrückt wurde 
+
+						// Überprüft ob innerhalb der Fläche des letzten Tabs gedrückt wurde
 						int left = 58 * (GUI_Main.this.tabbedPane.getTabCount() - 1);
 						int right = 58 * (GUI_Main.this.tabbedPane.getTabCount() - 1) + 58;
 						if (e.getX() >= left && e.getX() <= right && e.getY() > 0 && e.getY() < 20) {
-			
-							//Entfernt das Fach aus der Datenbank und der TabbedPane und löscht die currentKarte dieses Faches
-							//("Dieses Faches" ist relativ, da immer nur das letzte Fach gelöscht werden kann)
+
+							// Entfernt das Fach aus der Datenbank und der TabbedPane und löscht die
+							// currentKarte dieses Faches
+							// ("Dieses Faches" ist relativ, da immer nur das letzte Fach gelöscht werden
+							// kann)
 							int fachNummer = GUI_Main.this.tabbedPane.getTabCount();
 							VokabeltrainerDB.loeschenFach(GUI_Main.this.karteiNummer, fachNummer);
 							GUI_Main.this.tabbedPane.remove(GUI_Main.this.tabbedPane.getTabCount() - 1);
-							GUI_Main.this.currentKarte.remove(GUI_Main.this.currentKarte.size()-1);
-							
-							//Setzt den Knopf um Tabs hinzuzufügen immer hinter den letzten Tab
+							GUI_Main.this.currentKarte.remove(GUI_Main.this.currentKarte.size() - 1);
+
+							// Setzt den Knopf um Tabs hinzuzufügen immer hinter den letzten Tab
 							btnAddTab.setLocation(btnAddTab.getX() - 58, 0);
-							
-							//Probiert aus ob der Index noch stimmt, falls nicht wird er um 1 verringert
+
+							// Probiert aus ob der Index noch stimmt, falls nicht wird er um 1 verringert
 							try {
 								GUI_Main.this.tabbedPane.setSelectedIndex(GUI_Main.this.selectedTab);
-							}catch(IndexOutOfBoundsException e1) {
+							} catch (IndexOutOfBoundsException e1) {
 								GUI_Main.this.selectedTab--;
 							}
 						}
@@ -237,7 +251,8 @@ public class GUI_Main extends JFrame
 									e.printStackTrace();
 								}
 							}
-							System.out.println(VokabeltrainerDB.setKarteFalsch(GUI_Main.this.currentKarte.get(GUI_Main.this.selectedTab)));
+							System.out
+									.println(VokabeltrainerDB.setKarteFalsch(GUI_Main.this.currentKarte.get(GUI_Main.this.selectedTab)));
 							updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
 							createRandomKarte("In diesem Fach sind keine weiteren Wörter");
 							GUI_Main.this.tabs.get(GUI_Main.this.tabbedPane.getSelectedIndex()).eingabe.setText("");
@@ -401,6 +416,85 @@ public class GUI_Main extends JFrame
 			}
 		});
 
+		tab.btnEinstellungen.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+				GUI_Main.this.sd = new SettingsDialog();
+				GUI_Main.this.sd.btnErrinerung.addMouseListener(new MouseAdapter() {
+
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						GUI_Main.this.sd.errinerungsDialog = new ErrinerungDialog();
+						GUI_Main.this.sd.errinerungsDialog.btn_ok.addMouseListener(new MouseAdapter() {
+
+							@Override
+							public void mouseClicked(MouseEvent e) {
+								JTextField tf_value = GUI_Main.this.sd.errinerungsDialog.tf_value;
+								ChooseDate cal = GUI_Main.this.sd.errinerungsDialog.cal;
+								JLabel l_mitDatum = GUI_Main.this.sd.errinerungsDialog.l_mitDatum;
+
+								if (tf_value.getText().isEmpty()) {
+
+									try {
+										final String calDatum = cal.getDateAsString();
+										String date[] = calDatum.split("-");
+										Calendar calendar = Calendar.getInstance();
+										calendar.set(Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0]));
+										Calendar c = Calendar.getInstance();
+
+										int errinernIn = (int) TimeUnit.MILLISECONDS
+												.toDays(calendar.getTimeInMillis() - c.getTimeInMillis());
+
+										Fach fach = VokabeltrainerDB.getFach(GUI_Main.this.chosenKartei.getNummer(),
+												GUI_Main.this.selectedTab + 1);
+
+										VokabeltrainerDB.aendernFach(
+												new Fach(fach.getNummer(), fach.getBeschreibung(), errinernIn, fach.getGelerntAm()));
+
+										l_mitDatum
+												.setText("Am " + date[0] + "-" + (Integer.valueOf(date[1]) + 1) + "-" + date[2] + " errinern:");
+
+									} catch (NullPointerException f) {
+										JOptionPane.showMessageDialog(e.getComponent().getParent(),
+												"Es wurde keine Zeit oder Datum festgelegt!", "Errinerung setzten", JOptionPane.ERROR_MESSAGE);
+									}
+								} else {
+
+									try {
+										cal.getDateAsString();
+									} catch (NullPointerException f) {
+
+										Fach fach = VokabeltrainerDB.getFach(GUI_Main.this.chosenKartei.getNummer(),
+												GUI_Main.this.selectedTab + 1);
+
+										int check = VokabeltrainerDB.aendernFach(new Fach(fach.getNummer(), fach.getBeschreibung(),
+												Integer.parseInt(tf_value.getText()), fach.getGelerntAm()));
+										if (check == 0) {
+											GUI_Main.this.sd.errinerungsDialog.frame.dispose();
+											JOptionPane.showMessageDialog(GUI_Main.this.sd, "Errinerung Erfolgreich gesetzt! Sie werden in "
+													+ tf_value.getText() + " Tagen an dieses Fach errinert", "Errinerung",
+													JOptionPane.INFORMATION_MESSAGE);
+										} else {
+											JOptionPane.showMessageDialog(GUI_Main.this.sd, "Ein Fehler ist aufgetreten!", "Fehler",
+													JOptionPane.ERROR_MESSAGE);
+										}
+
+										return;
+									}
+									JOptionPane.showMessageDialog(e.getComponent().getParent(),
+											"Es kann nicht eine Zeit und ein Datum gleichzeitig festgelegt werden", "Errinerung setzten",
+											JOptionPane.ERROR_MESSAGE);
+								}
+							}
+						});
+
+					}
+				});
+
+			}
+		});
+
 	}
-	
 }

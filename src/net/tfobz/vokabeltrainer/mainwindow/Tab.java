@@ -7,13 +7,12 @@ import java.awt.event.*;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 
+import net.tfobz.vokabeltrainer.dialogs.SettingsDialog;
 import net.tfobz.vokabeltrainer.model.*;
 
 public class Tab extends JPanel
@@ -26,6 +25,7 @@ public class Tab extends JPanel
 	JButton btnPlus = new JButton("+");
 	JButton btnOk = new JButton("Ok");
 	JButton btnSwitch = new JButton("↕");
+	JButton btnEinstellungen = new JButton("Einstellungen");
 	/**
 	 * Create the application.
 	 */
@@ -78,16 +78,7 @@ public class Tab extends JPanel
 		this.btnSwitch.setBounds(338, 105, 40, 40);
 		this.add(btnSwitch);
 		
-		JButton btnEinstellungen = new JButton("Einstellungen");
 		btnEinstellungen.setBounds(584, 274, 130, 30);
-		btnEinstellungen.addMouseListener(new MouseAdapter() {
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				new net.tfobz.vokabeltrainer.dialogs.SettingsDialog();
-				System.out.println("boi");
-			}
-		});
 		this.add(btnEinstellungen);
 		
 		this.l_centerDialog.setFont(new Font("Tahoma", Font.PLAIN, 18));
