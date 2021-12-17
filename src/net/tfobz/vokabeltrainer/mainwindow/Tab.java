@@ -85,6 +85,7 @@ public class Tab extends JPanel
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				new net.tfobz.vokabeltrainer.dialogs.SettingsDialog();
+				System.out.println("boi");
 			}
 		});
 		this.add(btnEinstellungen);

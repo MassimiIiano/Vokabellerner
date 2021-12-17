@@ -91,9 +91,7 @@ public class ErrinerungDialog extends JFrame
 			panelPeriodisch.add(l_labels[i]);
 		}
 
-		l_mitDatum = new JLabel("");
-
-		l_mitDatum.setText("Oder am dd-MM-yyyy errinern:");
+		l_mitDatum = new JLabel("Oder am dd-MM-yyyy errinern:");
 		l_mitDatum.setFont(basic);
 
 		JButton btn_ok = new JButton("Errinerung setzten");
@@ -122,8 +120,9 @@ public class ErrinerungDialog extends JFrame
 
 						return;
 					}
-					JOptionPane.showMessageDialog(ErrinerungDialog.this, "Es kann nicht eine Zeit und ein Datum gleichzeitig festgelegt werden",
-							"Errinerung setzten", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(ErrinerungDialog.this,
+							"Es kann nicht eine Zeit und ein Datum gleichzeitig festgelegt werden", "Errinerung setzten",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -151,62 +150,47 @@ public class ErrinerungDialog extends JFrame
 		@Override
 		public void keyReleased(KeyEvent e) {
 
-			JTextField tf = (JTextField) e.getSource();
-			char charBefore;
-			if (tf.getText().length() == 0) {
+			if (e.getKeyCode() != KeyEvent.VK_BACK_SPACE) {
 
-				if (e.getKeyCode() >= KeyEvent.VK_0 && e.getKeyCode() <= KeyEvent.VK_9) {
+				JTextField tf = (JTextField) e.getSource();
 
-					synchronized (this) {
-						try {
-							wait(1);
-						} catch (InterruptedException e1) {
-						}
+				String charEntered = String.valueOf(e.getKeyChar());
+
+				if (tf.getText().length() == 1) {
+
+					tf.setText("");
+					if (charEntered.matches("\\d")) {
+						tf.setText(String.valueOf(e.getKeyChar()));
 					}
-					tf.setText(Character.toString(e.getKeyChar()));
-				} else
 
-					synchronized (this) {
-						try {
-							wait(1);
-						} catch (InterruptedException e1) {
-						}
+				} else if (tf.getText().length() == 2) {
+
+					String before = tf.getText();
+					
+					if (before.matches("\\d{2}")) {
+						tf.setText(before);
+					} else if (before.matches("\\d{1}[a-zA-Z]{1}")) {
+						tf.setText(String.valueOf(before.charAt(0)));
 					}
-				tf.setText("");
-			} else if (tf.getText().length() == 1) {
 
-				charBefore = tf.getText().charAt(0);
-				if (e.getKeyCode() >= KeyEvent.VK_0 && e.getKeyCode() <= KeyEvent.VK_9) {
+				} else {
 
-					synchronized (this) {
-						try {
-							wait(1);
-						} catch (InterruptedException e1) {
-						}
-					}
-					tf.setText(charBefore + Character.toString(e.getKeyChar()));
-				} else
-					synchronized (this) {
-						try {
-							wait(1);
-						} catch (InterruptedException e1) {
-						}
-					}
-				tf.setText(charBefore + "");
-			} else if (tf.getText().length() >= 2) {
-
-				if (e.getKeyCode() != KeyEvent.VK_BACK_SPACE) {
-
-					String textBefore = tf.getText().substring(0, 2);
-					synchronized (this) {
-						try {
-							wait(100);
-						} catch (InterruptedException e1) {
-						}
-						tf.setText(textBefore);
-						System.out.println("");
+					String before = tf.getText();
+					if(before.matches("\\d{2}\\w*")) {
+						tf.setText(before.substring(0, 2));
+					} else if(before.matches("\\d{1}[a-zA-Z]*")) {
+						tf.setText(String.valueOf(before.charAt(0)));
 					}
 				}
+			}
+		}
+	}
+
+	public void waitBeforeChange(long timeout) {
+		synchronized (this) {
+			try {
+				wait(timeout);
+			} catch (InterruptedException e1) {
 			}
 		}
 	}
