@@ -1,5 +1,6 @@
 package net.tfobz.vokabeltrainer.dialogs;
 
+import net.tfobz.vokabeltrainer.mainwindow.*;
 import net.tfobz.vokabeltrainer.model.*;
 import javax.swing.*;
 import java.awt.Toolkit;
@@ -59,7 +60,7 @@ public class SettingsDialog {
 		btnImport.addActionListener(e-> {
                 try {
                     int nummer = VokabeltrainerDB.getLernkarteien().indexOf(ChooseKartei.chooKartei());
-                    if(nummer != 0) {
+                    if(nummer != -1) {
                         JFileChooser chooser = new JFileChooser();
                         chooser.showOpenDialog(frmEinstellungen);
                         File file = chooser.getSelectedFile();
@@ -80,7 +81,7 @@ public class SettingsDialog {
 		btnExport.addActionListener(e -> {
         	try {
         		int nummer = VokabeltrainerDB.getLernkarteien().indexOf(ChooseKartei.chooKartei());
-        		if (nummer != 0) {
+        		if (nummer != -1) {
         			JFileChooser chooser = new JFileChooser();
         			chooser.showSaveDialog(frmEinstellungen);
         			boolean mitFaecher = false;
@@ -97,5 +98,9 @@ public class SettingsDialog {
 		frmEinstellungen.getContentPane().add(btnExport);
 
 		frmEinstellungen.setVisible(true);
+
+		ActionListener actionListener = (ActionListener) e -> {	
+			((GUI_Main) (frmEinstellungen.getParent())).setChosenKartei(ChooseKartei.chooKartei());
+		};
 	}
 }

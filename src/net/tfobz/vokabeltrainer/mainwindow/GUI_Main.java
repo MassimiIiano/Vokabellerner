@@ -40,6 +40,10 @@ public class GUI_Main extends JFrame {
 		});
 	}
 
+	public void setChosenKartei(Lernkartei chosenKartei) {
+		this.chosenKartei = chosenKartei;
+	}
+
 	public GUI_Main() {
 		this.setTitle("Vokabeltrainer");
 		this.setBounds((Toolkit.getDefaultToolkit().getScreenSize().width / 2) - 375,
