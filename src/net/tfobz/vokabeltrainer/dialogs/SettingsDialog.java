@@ -1,14 +1,11 @@
 package net.tfobz.vokabeltrainer.dialogs;
 
-import javax.swing.JLabel;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JButton;
-import javax.swing.DefaultComboBoxModel;
+import net.tfobz.vokabeltrainer.model.*;
+import javax.swing.*;
 import java.awt.Toolkit;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
+import java.io.File;
+import java.util.InputMismatchException;
 
 public class SettingsDialog {
 
@@ -59,10 +56,44 @@ public class SettingsDialog {
 
 		JButton btnImport = new JButton("Import");
 		btnImport.setBounds(385, 117, 97, 25);
+		btnImport.addActionListener(e-> {
+                try {
+                    int nummer = VokabeltrainerDB.getLernkarteien().indexOf(ChooseKartei.chooKartei());
+                    if(nummer != 0) {
+                        JFileChooser chooser = new JFileChooser();
+                        chooser.showOpenDialog(frmEinstellungen);
+                        File file = chooser.getSelectedFile();
+                        VokabeltrainerDB.importierenKarten(nummer, file.getAbsolutePath());
+                    } else 
+                        throw new InputMismatchException("Sie sollen eine Sprache aussuchen");
+                    
+                }catch(InputMismatchException e1) {
+                    JOptionPane.showMessageDialog(frmEinstellungen, e1.getMessage(), "Fehler",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            
+        });
 		frmEinstellungen.getContentPane().add(btnImport);
 
 		JButton btnExport = new JButton("Export");
 		btnExport.setBounds(276, 117, 97, 25);
+		btnExport.addActionListener(e -> {
+        	try {
+        		int nummer = VokabeltrainerDB.getLernkarteien().indexOf(ChooseKartei.chooKartei());
+        		if (nummer != 0) {
+        			JFileChooser chooser = new JFileChooser();
+        			chooser.showSaveDialog(frmEinstellungen);
+        			boolean mitFaecher = false;
+        			if (JOptionPane.showConfirmDialog(frmEinstellungen, "Auch die Faecher exportieren?", "FAECHER EXPORTIEREN", JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.YES_OPTION)
+        				mitFaecher = true;
+        			VokabeltrainerDB.exportierenKarten(nummer, chooser.getSelectedFile().getAbsolutePath(), mitFaecher);
+        		} else {
+        			throw new InputMismatchException("Sie sollen eine Sprache aussuchen");
+        		}
+        	} catch (InputMismatchException e1) {
+        		JOptionPane.showMessageDialog(frmEinstellungen, e1.getMessage(), "Fehler", JOptionPane.ERROR_MESSAGE);
+        	}
+        });
 		frmEinstellungen.getContentPane().add(btnExport);
 
 		frmEinstellungen.setVisible(true);
