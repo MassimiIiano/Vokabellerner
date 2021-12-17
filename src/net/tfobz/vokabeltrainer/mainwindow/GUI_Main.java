@@ -54,7 +54,7 @@ public class GUI_Main extends JFrame
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		getContentPane().setLayout(null);
-
+		
 		// Zeigt Benutzer Auswahl aller gefundenen Lernkarteien, falls keine vorhanden
 		// ist, wird eine Starterkartei erstellt.
 		// Die Auswahl des Benutzer wird in einer Variable gespeichert.
@@ -139,6 +139,7 @@ public class GUI_Main extends JFrame
 				public void mouseClicked(MouseEvent e) {
 					if (e.getButton() == 1) {
 						GUI_Main.this.selectedTab = GUI_Main.this.tabbedPane.getSelectedIndex();
+						System.out.println(GUI_Main.this.selectedTab);
 						int left = 58 * GUI_Main.this.tabbedPane.getSelectedIndex();
 						int right = (58 * GUI_Main.this.tabbedPane.getSelectedIndex()) + 58;
 						if (e.getX() >= left && e.getX() <= right && e.getY() > 0 && e.getY() < 20) {
@@ -175,7 +176,8 @@ public class GUI_Main extends JFrame
 			updateCenterDialog(Color.BLACK, "Geben Sie Ihre Antwort ein: ");
 			createRandomKarte("In diesem Fach sind keine weiteren Wörter");
 			this.tabs.get(this.tabbedPane.getSelectedIndex()).eingabe.setText("");
-
+			
+			
 			setVisible(true);
 		} else {
 			this.dispose();

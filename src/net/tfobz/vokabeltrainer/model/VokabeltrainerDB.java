@@ -81,8 +81,6 @@ public class VokabeltrainerDB {
 		loeschenTabellen();
 		// Erstellen der Tabellen falls nicht vorhanden
 		erstellenTabellen();
-		// Hinzuf�gen von Testdaten
-		hinzufuegenTestdaten();
 	}
 
 	/**
