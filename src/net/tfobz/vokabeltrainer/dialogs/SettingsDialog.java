@@ -1,106 +1,94 @@
 package net.tfobz.vokabeltrainer.dialogs;
 
-import net.tfobz.vokabeltrainer.mainwindow.*;
 import net.tfobz.vokabeltrainer.model.*;
 import javax.swing.*;
 import java.awt.Toolkit;
-import java.awt.event.*;
 import java.io.File;
 import java.util.InputMismatchException;
 
-public class SettingsDialog {
+public class SettingsDialog extends JDialog
+{
 
-	private JDialog frmEinstellungen;
+	public ErrinerungDialog errinerungsDialog;
+	public JButton btnErrinerung = new JButton("Errinerung");
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	public SettingsDialog() {
-		frmEinstellungen = new JDialog();
-
-		frmEinstellungen.setTitle("Einstellungen");
-		frmEinstellungen.setResizable(false);
-		frmEinstellungen.setBounds((Toolkit.getDefaultToolkit().getScreenSize().width / 2) - 250,
-				(Toolkit.getDefaultToolkit().getScreenSize().height / 2) - 90, 500, 180);
-		frmEinstellungen.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		frmEinstellungen.getContentPane().setLayout(null);
+		this.setTitle("Einstellungen");
+		this.setResizable(false);
+		this.setBounds((Toolkit.getDefaultToolkit().getScreenSize().width/2)-250,
+				(Toolkit.getDefaultToolkit().getScreenSize().height/2)-90, 500, 180);
+		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		this.getContentPane().setLayout(null);
 
 		JCheckBox chckbxGrosskleinschreibungBeachten = new JCheckBox("Gross-/Kleinschreibung beachten");
 		chckbxGrosskleinschreibungBeachten.setBounds(8, 9, 466, 25);
-		frmEinstellungen.getContentPane().add(chckbxGrosskleinschreibungBeachten);
+		this.getContentPane().add(chckbxGrosskleinschreibungBeachten);
 
 		JCheckBox chckbxNurLektionenMit = new JCheckBox("Nur Lektionen mit abgelaufener Errinerung");
 		chckbxNurLektionenMit.setBounds(8, 39, 466, 25);
-		frmEinstellungen.getContentPane().add(chckbxNurLektionenMit);
+		this.getContentPane().add(chckbxNurLektionenMit);
 
 		JLabel lblTheme = new JLabel("Theme:");
 		lblTheme.setBounds(12, 83, 56, 16);
-		frmEinstellungen.getContentPane().add(lblTheme);
+		this.getContentPane().add(lblTheme);
 
 		JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] { "Dark", "White" }));
 		comboBox.setBounds(80, 80, 108, 22);
 		comboBox.setSelectedItem("White");
-		frmEinstellungen.getContentPane().add(comboBox);
+		this.getContentPane().add(comboBox);
 
-		JButton btnErrinerung = new JButton("Errinerung");
+		
 		btnErrinerung.setBounds(10, 117, 97, 25);
-		btnErrinerung.addMouseListener(new MouseAdapter() {
 
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				new ErrinerungDialog();
-			}
-
-		});
-		frmEinstellungen.getContentPane().add(btnErrinerung);
-
+		this.getContentPane().add(btnErrinerung);
+		
 		JButton btnImport = new JButton("Import");
 		btnImport.setBounds(385, 117, 97, 25);
 		btnImport.addActionListener(e-> {
                 try {
-                    int nummer = VokabeltrainerDB.getLernkarteien().indexOf(ChooseKartei.chooKartei());
-                    if(nummer != -1) {
+                    int nummer = VokabeltrainerDB.getLernkarteien().indexOf(ChooseKartei.chooseKartei())+1;
+                    if(nummer != 0) {
                         JFileChooser chooser = new JFileChooser();
-                        chooser.showOpenDialog(frmEinstellungen);
+                        chooser.showOpenDialog(SettingsDialog.this);
                         File file = chooser.getSelectedFile();
                         VokabeltrainerDB.importierenKarten(nummer, file.getAbsolutePath());
                     } else 
                         throw new InputMismatchException("Sie sollen eine Sprache aussuchen");
                     
                 }catch(InputMismatchException e1) {
-                    JOptionPane.showMessageDialog(frmEinstellungen, e1.getMessage(), "Fehler",
+                    JOptionPane.showMessageDialog(SettingsDialog.this, e1.getMessage(), "Fehler",
                             JOptionPane.ERROR_MESSAGE);
                 }
             
         });
-		frmEinstellungen.getContentPane().add(btnImport);
+		getContentPane().add(btnImport);
 
 		JButton btnExport = new JButton("Export");
 		btnExport.setBounds(276, 117, 97, 25);
 		btnExport.addActionListener(e -> {
         	try {
-        		int nummer = VokabeltrainerDB.getLernkarteien().indexOf(ChooseKartei.chooKartei());
-        		if (nummer != -1) {
+        		int nummer = VokabeltrainerDB.getLernkarteien().indexOf(ChooseKartei.chooseKartei())+1;
+        		if (nummer != 0) {
         			JFileChooser chooser = new JFileChooser();
-        			chooser.showSaveDialog(frmEinstellungen);
+        			chooser.showSaveDialog(SettingsDialog.this);
         			boolean mitFaecher = false;
-        			if (JOptionPane.showConfirmDialog(frmEinstellungen, "Auch die Faecher exportieren?", "FAECHER EXPORTIEREN", JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.YES_OPTION)
+        			if (JOptionPane.showConfirmDialog(SettingsDialog.this, "Auch die Faecher exportieren?", "FAECHER EXPORTIEREN", JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.YES_OPTION)
         				mitFaecher = true;
-        			VokabeltrainerDB.exportierenKarten(nummer, chooser.getSelectedFile().getAbsolutePath(), mitFaecher);
+        			System.out.println(nummer);
+        			System.out.println(VokabeltrainerDB.exportierenKarten(nummer, chooser.getSelectedFile().getAbsolutePath(), mitFaecher));
         		} else {
         			throw new InputMismatchException("Sie sollen eine Sprache aussuchen");
         		}
         	} catch (InputMismatchException e1) {
-        		JOptionPane.showMessageDialog(frmEinstellungen, e1.getMessage(), "Fehler", JOptionPane.ERROR_MESSAGE);
+        		JOptionPane.showMessageDialog(SettingsDialog.this, e1.getMessage(), "Fehler", JOptionPane.ERROR_MESSAGE);
         	}
         });
-		frmEinstellungen.getContentPane().add(btnExport);
+		getContentPane().add(btnExport);
 
-		frmEinstellungen.setVisible(true);
-
-		ActionListener actionListener = (ActionListener) e -> {	
-			((GUI_Main) (frmEinstellungen.getParent())).setChosenKartei(ChooseKartei.chooKartei());
-		};
+		setVisible(true);
 	}
 }

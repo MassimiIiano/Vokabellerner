@@ -10,11 +10,10 @@ import org.jdatepicker.impl.UtilDateModel;
 public class ChooseDate extends JPanel {
 
 	JDatePickerImpl datePicker;
-
-	public ChooseDate(JLabel l_date, JDatePickerImpl datePicker) {
+	
+	public ChooseDate(JDatePickerImpl datePicker) {
 		this.datePicker = datePicker;
-		setLayout(new FlowLayout());
-
+		setLayout(new FlowLayout());	
 		add(datePicker);
 		setVisible(true);
 	}
@@ -24,7 +23,6 @@ public class ChooseDate extends JPanel {
 		UtilDateModel test = (UtilDateModel) datePicker.getModel();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(test.getValue());
-		return String.valueOf(cal.get(Calendar.DATE)) + "-" + String.valueOf(cal.get(Calendar.MONTH)) + "-" +
-				String.valueOf(cal.get(Calendar.YEAR));
+		return String.valueOf(test.getDay() + "-" + (test.getMonth()) + "-" + test.getYear());
 	}
 }

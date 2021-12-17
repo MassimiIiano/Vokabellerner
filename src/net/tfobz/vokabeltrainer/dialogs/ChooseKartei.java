@@ -29,7 +29,7 @@ public class ChooseKartei
 		return (Lernkartei) ret;
 	}
 
-	public static Lernkartei chooKartei() {
+	public static Lernkartei chooseKartei() {
 		return chooseKartei(new JFrame());
 	}
 

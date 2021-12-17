@@ -2,7 +2,6 @@ package net.tfobz.vokabeltrainer.mainwindow;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.*;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -22,8 +21,7 @@ public class Tab extends JPanel {
 	JButton btnMinus = new JButton("-");
 	JButton btnPlus = new JButton("+");
 	JButton btnOk = new JButton("Ok");
-	JButton btnSwitch = new JButton("↕");
-
+	JButton btnEinstellungen = new JButton("Einstellungen");
 	/**
 	 * Create the application.
 	 */
@@ -68,24 +66,9 @@ public class Tab extends JPanel {
 		this.btnOk.setBackground(new Color(240, 240, 240));
 		this.btnOk.setBounds(519, 208, 50, 50);
 		this.add(btnOk);
-
-		this.btnSwitch.setToolTipText("Tausche die Sprachen");
-		this.btnSwitch.setFont(basic);
-		this.btnSwitch.setBorder(null);
-		this.btnSwitch.setBackground(new Color(240, 240, 240));
-		this.btnSwitch.setBounds(338, 105, 40, 40);
-		this.add(btnSwitch);
-
-		JButton btnEinstellungen = new JButton("Einstellungen");
+		
 		btnEinstellungen.setBounds(584, 274, 130, 30);
-		btnEinstellungen.addMouseListener(new MouseAdapter() {
 
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				new net.tfobz.vokabeltrainer.dialogs.SettingsDialog();
-				System.out.println("boi");
-			}
-		});
 		this.add(btnEinstellungen);
 
 		this.l_centerDialog.setFont(new Font("Tahoma", Font.PLAIN, 18));
