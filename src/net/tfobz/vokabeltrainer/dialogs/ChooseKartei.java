@@ -25,7 +25,7 @@ public class ChooseKartei
 		Object[] list = lernkarteien.toArray();
 		Object ret = JOptionPane.showInputDialog(parent, "Karteien:", "Vokabeltrainer - Lernkartei Auswahl",
 				JOptionPane.QUESTION_MESSAGE, null, list, "Waehle deine Kartei");
-		Lernkartei test = (Lernkartei) ret;
+		// Lernkartei test = (Lernkartei) ret;
 		return (Lernkartei) ret;
 	}
 

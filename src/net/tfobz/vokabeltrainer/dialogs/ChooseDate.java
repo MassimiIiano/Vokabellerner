@@ -7,9 +7,8 @@ import javax.swing.*;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-public class ChooseDate extends JPanel
-{
-	
+public class ChooseDate extends JPanel {
+
 	JDatePickerImpl datePicker;
 	
 	public ChooseDate(JDatePickerImpl datePicker) {
@@ -18,9 +17,9 @@ public class ChooseDate extends JPanel
 		add(datePicker);
 		setVisible(true);
 	}
-	
+
 	public String getDateAsString() {
-		
+
 		UtilDateModel test = (UtilDateModel) datePicker.getModel();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(test.getValue());

@@ -18,8 +18,7 @@ import java.awt.event.MouseEvent;
 import java.util.Calendar;
 import java.util.Properties;
 
-public class ErrinerungDialog
-{
+public class ErrinerungDialog extends JFrame {
 
 	public JFrame frame = new JFrame();
 	public JLabel l_mitDatum;
@@ -90,6 +89,7 @@ public class ErrinerungDialog
 		l_mitDatum = new JLabel("Am dd-MM-yyyy errinern:");
 		l_mitDatum.setFont(basic);
 
+
 		JButton btn_cancel = new JButton("Abbrechen");
 		btn_cancel.addMouseListener(new MouseAdapter() {
 
@@ -107,8 +107,7 @@ public class ErrinerungDialog
 		frame.setVisible(true);
 	}
 
-	private class TextFieldKeyHoerer extends KeyAdapter
-	{
+	private class TextFieldKeyHoerer extends KeyAdapter {
 
 		@Override
 		public void keyReleased(KeyEvent e) {

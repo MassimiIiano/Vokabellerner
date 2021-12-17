@@ -6,8 +6,7 @@ import java.util.Date;
 
 import org.junit.Test;
 
-public class VokabeltrainerDBTest
-{
+public class VokabeltrainerDBTest {
 	@Test
 	public void getLernkarteiTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -18,6 +17,7 @@ public class VokabeltrainerDBTest
 		assertNotNull(VokabeltrainerDB.getLernkartei(3));
 		assertNull(VokabeltrainerDB.getLernkartei(4));
 	}
+
 	@Test
 	public void getLernkarteienTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -26,6 +26,7 @@ public class VokabeltrainerDBTest
 		VokabeltrainerDB.hinzufuegenTestdaten();
 		assertEquals(3, VokabeltrainerDB.getLernkarteien().size());
 	}
+
 	@Test
 	public void getFaecherTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -35,6 +36,7 @@ public class VokabeltrainerDBTest
 		assertEquals(1, VokabeltrainerDB.getFaecher(1).size());
 		assertEquals(0, VokabeltrainerDB.getFaecher(3).size());
 	}
+
 	@Test
 	public void getFachTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -43,6 +45,7 @@ public class VokabeltrainerDBTest
 		assertNull(VokabeltrainerDB.getFach(1, 3));
 		assertEquals(1, VokabeltrainerDB.getFach(1, 1).getNummer());
 	}
+
 	@Test
 	public void getFachNummerFachTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -51,6 +54,7 @@ public class VokabeltrainerDBTest
 		assertNull(VokabeltrainerDB.getFach(3));
 		assertEquals(1, VokabeltrainerDB.getFach(1).getNummer());
 	}
+
 	@Test
 	public void getKarteTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -65,6 +69,7 @@ public class VokabeltrainerDBTest
 		assertEquals(VokabeltrainerDB.convertToString(
 				VokabeltrainerDB.getDateOneDayBeforeToday()), f.getGelerntAmString());
 	}
+
 	@Test
 	public void aendernFachTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -83,6 +88,7 @@ public class VokabeltrainerDBTest
 		f.setBeschreibung(null);
 		assertEquals(-2, VokabeltrainerDB.aendernFach(f));
 	}
+
 	@Test
 	public void setKarteRichtigTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -91,12 +97,13 @@ public class VokabeltrainerDBTest
 		Karte k = VokabeltrainerDB.getZufaelligeKarte(1, 1);
 		assertEquals(-2, VokabeltrainerDB.setKarteRichtig(k));
 		Fach f = new Fach();
-		assertEquals(0, VokabeltrainerDB.hinzufuegenFach(1,f));
+		assertEquals(0, VokabeltrainerDB.hinzufuegenFach(1, f));
 		f = VokabeltrainerDB.getFach(3);
 		assertEquals(0, VokabeltrainerDB.setKarteRichtig(k));
 		assertEquals(null, VokabeltrainerDB.getZufaelligeKarte(1, 1));
 		assertEquals(k, VokabeltrainerDB.getZufaelligeKarte(1, 3));
 	}
+
 	@Test
 	public void setKarteRichtigTest1() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -109,13 +116,14 @@ public class VokabeltrainerDBTest
 		assertEquals(
 				VokabeltrainerDB.convertToString(VokabeltrainerDB.getDateOneDayBeforeToday()), f.getGelerntAmString());
 		Fach f1 = new Fach();
-		assertEquals(0,VokabeltrainerDB.hinzufuegenFach(1, f1));
+		assertEquals(0, VokabeltrainerDB.hinzufuegenFach(1, f1));
 		Karte k = VokabeltrainerDB.getZufaelligeKarte(1, 1);
 		assertEquals(0, VokabeltrainerDB.setKarteRichtig(k));
 		f = VokabeltrainerDB.getFach(1);
 		assertEquals(
 				VokabeltrainerDB.convertToString(new Date()), f.getGelerntAmString());
 	}
+
 	@Test
 	public void setKarteFalschTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -123,7 +131,7 @@ public class VokabeltrainerDBTest
 		VokabeltrainerDB.hinzufuegenTestdaten();
 		Karte k = VokabeltrainerDB.getZufaelligeKarte(1, 1);
 		Fach f = new Fach();
-		assertEquals(0, VokabeltrainerDB.hinzufuegenFach(1,f));
+		assertEquals(0, VokabeltrainerDB.hinzufuegenFach(1, f));
 		f = VokabeltrainerDB.getFach(3);
 		assertEquals(0, VokabeltrainerDB.setKarteRichtig(k));
 		assertEquals(null, VokabeltrainerDB.getZufaelligeKarte(1, 1));
@@ -132,6 +140,7 @@ public class VokabeltrainerDBTest
 		assertEquals(k, VokabeltrainerDB.getZufaelligeKarte(1, 1));
 		assertEquals(null, VokabeltrainerDB.getZufaelligeKarte(1, 3));
 	}
+
 	@Test
 	public void setKarteFalschTest1() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -149,6 +158,7 @@ public class VokabeltrainerDBTest
 		assertEquals(
 				VokabeltrainerDB.convertToString(new Date()), f.getGelerntAmString());
 	}
+
 	@Test
 	public void hinzufuegenFachTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -171,6 +181,7 @@ public class VokabeltrainerDBTest
 				VokabeltrainerDB.convertToString(VokabeltrainerDB.getDateOneDayBeforeToday()),
 				VokabeltrainerDB.convertToString(f.getGelerntAm()));
 	}
+
 	@Test
 	public void hinzufuegenLernkarteiTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -193,6 +204,7 @@ public class VokabeltrainerDBTest
 		assertEquals(-2, VokabeltrainerDB.hinzufuegenLernkartei(l));
 		assertEquals(1, l.getFehler().size());
 	}
+
 	@Test
 	public void aendernLernkarteiTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -211,6 +223,7 @@ public class VokabeltrainerDBTest
 		l1 = VokabeltrainerDB.getLernkartei(1);
 		assertEquals(l, l1);
 	}
+
 	@Test
 	public void loeschenLernkarteiTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -221,6 +234,7 @@ public class VokabeltrainerDBTest
 		assertEquals(0, VokabeltrainerDB.loeschenLernkartei(1));
 		assertNull(VokabeltrainerDB.getFach(1));
 	}
+
 	@Test
 	public void hinzufuegenKarteTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -238,12 +252,13 @@ public class VokabeltrainerDBTest
 		assertEquals(0, VokabeltrainerDB.hinzufuegenKarte(2, k));
 		assertEquals(k, VokabeltrainerDB.getZufaelligeKarte(2, 2));
 	}
+
 	@Test
 	public void aendernKarteTest() {
 		VokabeltrainerDB.loeschenTabellen();
 		VokabeltrainerDB.erstellenTabellen();
 		VokabeltrainerDB.hinzufuegenTestdaten();
-		Karte k = VokabeltrainerDB.getZufaelligeKarte(1,1);
+		Karte k = VokabeltrainerDB.getZufaelligeKarte(1, 1);
 		assertEquals(1, k.getNummer());
 		k.setWortEins(null);
 		assertEquals(-2, VokabeltrainerDB.aendernKarte(k));
@@ -257,8 +272,9 @@ public class VokabeltrainerDBTest
 		k.setWortEins("w11");
 		k.setWortZwei("w21");
 		assertEquals(0, VokabeltrainerDB.aendernKarte(k));
-		assertEquals(k,VokabeltrainerDB.getKarte(k.getNummer()));
+		assertEquals(k, VokabeltrainerDB.getKarte(k.getNummer()));
 	}
+
 	@Test
 	public void loeschenKarteTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -268,6 +284,7 @@ public class VokabeltrainerDBTest
 		assertEquals(0, VokabeltrainerDB.loeschenKarte(1));
 		assertNull(VokabeltrainerDB.getZufaelligeKarte(1, 1));
 	}
+
 	@Test
 	public void loeschenAlleFaecherTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -276,8 +293,9 @@ public class VokabeltrainerDBTest
 		assertEquals(-1, VokabeltrainerDB.loeschenAlleFaecher(10));
 		assertEquals(0, VokabeltrainerDB.loeschenAlleFaecher(1));
 		assertEquals(0, VokabeltrainerDB.getFaecher(1).size());
-		assertNull(VokabeltrainerDB.getZufaelligeKarte(1,1));
+		assertNull(VokabeltrainerDB.getZufaelligeKarte(1, 1));
 	}
+
 	@Test
 	public void getLernkarteienErinnerungTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -298,6 +316,7 @@ public class VokabeltrainerDBTest
 		assertEquals(VokabeltrainerDB.getLernkarteienErinnerung().get(0),
 				VokabeltrainerDB.getLernkartei(1));
 	}
+
 	@Test
 	public void getFaecherErinnerungTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -313,6 +332,7 @@ public class VokabeltrainerDBTest
 		assertEquals(VokabeltrainerDB.getFaecherErinnerung(1).get(0),
 				VokabeltrainerDB.getFach(1));
 	}
+
 	@Test
 	public void getKartenTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -322,6 +342,7 @@ public class VokabeltrainerDBTest
 		assertEquals(0, VokabeltrainerDB.getKarten(2).size());
 		assertEquals(1, VokabeltrainerDB.getKarten(1).size());
 	}
+
 	@Test
 	public void importierenKartenTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -352,6 +373,7 @@ public class VokabeltrainerDBTest
 		assertEquals(3, VokabeltrainerDB.getKarten(4).size());
 		assertEquals(1, VokabeltrainerDB.getKarten(5).size());
 	}
+
 	@Test
 	public void exportierenKartenTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -370,6 +392,7 @@ public class VokabeltrainerDBTest
 		assertEquals(0, VokabeltrainerDB.importierenKarten(1, "imports\\kartenMitFaecher.txt"));
 		assertEquals(0, VokabeltrainerDB.exportierenKarten(1, "exports\\kartenMitFaecherEins.txt", true));
 	}
+
 	@Test
 	public void getStandardLernkarteiTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -379,6 +402,7 @@ public class VokabeltrainerDBTest
 		assertEquals(0, VokabeltrainerDB.setEinstellungenStandardLernkartei(1));
 		assertEquals(1, VokabeltrainerDB.getEinstellungenStandardLernkartei().getNummer());
 	}
+
 	@Test
 	public void setStandardLernkarteiTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -390,6 +414,7 @@ public class VokabeltrainerDBTest
 		assertEquals(0, VokabeltrainerDB.setEinstellungenStandardLernkartei(-1));
 		assertNull(VokabeltrainerDB.getEinstellungenStandardLernkartei());
 	}
+
 	@Test
 	public void setStandardLernkarteienMitErinnerungTest() {
 		VokabeltrainerDB.loeschenTabellen();
@@ -400,6 +425,7 @@ public class VokabeltrainerDBTest
 		assertEquals(0, VokabeltrainerDB.setEinstellungenLernkarteienMitErinnerung(false));
 		assertFalse(VokabeltrainerDB.getEinstellungenLernkarteienMitErinnerung());
 	}
+
 	@Test
 	public void getErinnerungFaelligTest() {
 		Fach f = new Fach();
