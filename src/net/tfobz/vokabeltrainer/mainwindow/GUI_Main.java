@@ -1,6 +1,8 @@
 package net.tfobz.vokabeltrainer.mainwindow;
 
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -138,8 +140,9 @@ public class GUI_Main extends JFrame
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					if (e.getButton() == 1) {
+						System.out.println(VokabeltrainerDB.getLernkarteien().size());
+						System.out.println(VokabeltrainerDB.getFaecher(1).size());
 						GUI_Main.this.selectedTab = GUI_Main.this.tabbedPane.getSelectedIndex();
-						System.out.println(GUI_Main.this.selectedTab);
 						int left = 58 * GUI_Main.this.tabbedPane.getSelectedIndex();
 						int right = (58 * GUI_Main.this.tabbedPane.getSelectedIndex()) + 58;
 						if (e.getX() >= left && e.getX() <= right && e.getY() > 0 && e.getY() < 20) {
@@ -185,6 +188,7 @@ public class GUI_Main extends JFrame
 	}
 
 	public void createRandomKarte(String text) {
+		System.out.println(chosenKartei.toString());
 		Karte randomKarte = VokabeltrainerDB.getZufaelligeKarte(this.chosenKartei.getNummer(),
 				this.tabbedPane.getSelectedIndex() + 1);
 		if (randomKarte == null) {
@@ -401,6 +405,18 @@ public class GUI_Main extends JFrame
 			public void mouseClicked(MouseEvent e) {
 
 				GUI_Main.this.sd = new SettingsDialog();
+				
+				GUI_Main.this.sd.chckbxGrosskleinschreibungBeachten.addActionListener(f -> {
+
+					VokabeltrainerDB.exportierenKarten(GUI_Main.this.chosenKartei.getNummer(), "Lernkarteien/" + 
+							GUI_Main.this.chosenKartei.getBeschreibung() + ".txt", true);
+					VokabeltrainerDB.aendernLernkartei(new Lernkartei(GUI_Main.this.chosenKartei.getNummer(),
+							GUI_Main.this.chosenKartei.getBeschreibung(), GUI_Main.this.chosenKartei.getWortEinsBeschreibung(),
+							GUI_Main.this.chosenKartei.getWortZweiBeschreibung(), GUI_Main.this.chosenKartei.getRichtung(),
+							!GUI_Main.this.chosenKartei.getGrossKleinschreibung()));
+					importKarten();
+				});
+				
 				GUI_Main.this.sd.btnErrinerung.addMouseListener(new MouseAdapter() {
 
 					@Override

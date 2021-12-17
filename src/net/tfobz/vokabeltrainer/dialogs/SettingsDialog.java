@@ -11,6 +11,8 @@ public class SettingsDialog extends JDialog
 
 	public ErrinerungDialog errinerungsDialog;
 	public JButton btnErrinerung = new JButton("Errinerung");
+	public JCheckBox chckbxGrosskleinschreibungBeachten = new JCheckBox("Gross-/Kleinschreibung beachten");
+	public JCheckBox chckbxNurLektionenMit = new JCheckBox("Nur Lektionen mit abgelaufener Errinerung");
 
 	/**
 	 * Initialize the contents of the frame.
@@ -23,11 +25,11 @@ public class SettingsDialog extends JDialog
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.getContentPane().setLayout(null);
 
-		JCheckBox chckbxGrosskleinschreibungBeachten = new JCheckBox("Gross-/Kleinschreibung beachten");
+		
 		chckbxGrosskleinschreibungBeachten.setBounds(8, 9, 466, 25);
 		this.getContentPane().add(chckbxGrosskleinschreibungBeachten);
 
-		JCheckBox chckbxNurLektionenMit = new JCheckBox("Nur Lektionen mit abgelaufener Errinerung");
+		
 		chckbxNurLektionenMit.setBounds(8, 39, 466, 25);
 		this.getContentPane().add(chckbxNurLektionenMit);
 
