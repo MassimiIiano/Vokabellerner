@@ -1,6 +1,5 @@
 package net.tfobz.vokabeltrainer.dialogs;
 
-
 import javax.swing.JLabel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -11,8 +10,7 @@ import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class SettingsDialog
-{
+public class SettingsDialog {
 
 	private JDialog frmEinstellungen;
 
@@ -24,8 +22,8 @@ public class SettingsDialog
 
 		frmEinstellungen.setTitle("Einstellungen");
 		frmEinstellungen.setResizable(false);
-		frmEinstellungen.setBounds((Toolkit.getDefaultToolkit().getScreenSize().width/2)-250,
-				(Toolkit.getDefaultToolkit().getScreenSize().height/2)-90, 500, 180);
+		frmEinstellungen.setBounds((Toolkit.getDefaultToolkit().getScreenSize().width / 2) - 250,
+				(Toolkit.getDefaultToolkit().getScreenSize().height / 2) - 90, 500, 180);
 		frmEinstellungen.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		frmEinstellungen.getContentPane().setLayout(null);
 
@@ -50,15 +48,15 @@ public class SettingsDialog
 		JButton btnErrinerung = new JButton("Errinerung");
 		btnErrinerung.setBounds(10, 117, 97, 25);
 		btnErrinerung.addMouseListener(new MouseAdapter() {
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				new ErrinerungDialog();
 			}
-			
+
 		});
 		frmEinstellungen.getContentPane().add(btnErrinerung);
-		
+
 		JButton btnImport = new JButton("Import");
 		btnImport.setBounds(385, 117, 97, 25);
 		frmEinstellungen.getContentPane().add(btnImport);
@@ -66,7 +64,7 @@ public class SettingsDialog
 		JButton btnExport = new JButton("Export");
 		btnExport.setBounds(276, 117, 97, 25);
 		frmEinstellungen.getContentPane().add(btnExport);
-		
+
 		frmEinstellungen.setVisible(true);
 	}
 }

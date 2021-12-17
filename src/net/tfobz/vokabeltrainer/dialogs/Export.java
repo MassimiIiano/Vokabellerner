@@ -25,7 +25,7 @@ public class Export extends JDialog {
 
         // JList list = new JList(options.toArray());
         // list.setSelectionMode(
-        //         ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        // ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         // int[] select = { 19, 20, 22 };
         // list.setSelectedIndices(select);
         // JOptionPane.showMessageDialog(null, new JScrollPane(list));

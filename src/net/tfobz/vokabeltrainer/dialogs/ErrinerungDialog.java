@@ -18,8 +18,7 @@ import java.awt.event.MouseEvent;
 import java.util.Calendar;
 import java.util.Properties;
 
-public class ErrinerungDialog extends JFrame
-{
+public class ErrinerungDialog extends JFrame {
 
 	JFrame frame = new JFrame();
 	JLabel l_mitDatum;
@@ -100,13 +99,15 @@ public class ErrinerungDialog extends JFrame
 			@Override
 			public void mouseClicked(MouseEvent e) {
 
-				if (tf_values[0].getText().isEmpty() && tf_values[1].getText().isEmpty() && tf_values[2].getText().isEmpty()) {
+				if (tf_values[0].getText().isEmpty() && tf_values[1].getText().isEmpty()
+						&& tf_values[2].getText().isEmpty()) {
 
 					try {
 						final String calDatum = cal.getDateAsString();
 						l_mitDatum.setText("Oder am " + calDatum + " errinern:");
 					} catch (NullPointerException f) {
-						JOptionPane.showMessageDialog(ErrinerungDialog.this, "Es wurde keine Zeit oder Datum festgelegt!",
+						JOptionPane.showMessageDialog(ErrinerungDialog.this,
+								"Es wurde keine Zeit oder Datum festgelegt!",
 								"Errinerung setzten", JOptionPane.ERROR_MESSAGE);
 					}
 				} else {
@@ -121,7 +122,8 @@ public class ErrinerungDialog extends JFrame
 						return;
 					}
 					JOptionPane.showMessageDialog(ErrinerungDialog.this,
-							"Es kann nicht eine Zeit und ein Datum gleichzeitig festgelegt werden", "Errinerung setzten",
+							"Es kann nicht eine Zeit und ein Datum gleichzeitig festgelegt werden",
+							"Errinerung setzten",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -144,8 +146,7 @@ public class ErrinerungDialog extends JFrame
 		frame.setVisible(true);
 	}
 
-	private class TextFieldKeyHoerer extends KeyAdapter
-	{
+	private class TextFieldKeyHoerer extends KeyAdapter {
 
 		@Override
 		public void keyReleased(KeyEvent e) {
@@ -166,7 +167,7 @@ public class ErrinerungDialog extends JFrame
 				} else if (tf.getText().length() == 2) {
 
 					String before = tf.getText();
-					
+
 					if (before.matches("\\d{2}")) {
 						tf.setText(before);
 					} else if (before.matches("\\d{1}[a-zA-Z]{1}")) {
@@ -176,9 +177,9 @@ public class ErrinerungDialog extends JFrame
 				} else {
 
 					String before = tf.getText();
-					if(before.matches("\\d{2}\\w*")) {
+					if (before.matches("\\d{2}\\w*")) {
 						tf.setText(before.substring(0, 2));
-					} else if(before.matches("\\d{1}[a-zA-Z]*")) {
+					} else if (before.matches("\\d{1}[a-zA-Z]*")) {
 						tf.setText(String.valueOf(before.charAt(0)));
 					}
 				}
