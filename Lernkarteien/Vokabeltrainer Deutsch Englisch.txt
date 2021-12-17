@@ -1,7 +1,7 @@
 Haus; house
 Fuchs; fox
 Geschirr; Dishes
-Lösung; solution
+LÃ¶sung; solution
 erkennen; recognize
 Architekt; architect
 Medizin; medicin
@@ -16,5 +16,5 @@ Hauptstadt; capital
 Klavier; piano
 Batterie; battery
 Erlaubnis; permission
-Privatsphäre; privacy
+PrivatsphÃ¤re; privacy
 generieren; generate
